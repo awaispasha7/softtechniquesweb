@@ -103,7 +103,7 @@ export default function SchedulePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#2d4539] via-[#3a5a4f] to-[#2d4539] flex items-center justify-center p-4">
 
       <div className="relative w-full max-w-2xl">
         {/* Header */}
@@ -132,7 +132,7 @@ export default function SchedulePage() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 shadow-2xl p-8">
+        <div className="bg-[#2d4539]/80 backdrop-blur-sm rounded-2xl border border-[#4a6b5f]/50 shadow-2xl p-8">
           <form onSubmit={handleScheduleSubmit} className="space-y-6">
             {/* Personal Information */}
             <div className="space-y-4">
@@ -147,7 +147,7 @@ export default function SchedulePage() {
                     required
                     value={scheduleForm.name}
                     onChange={(e) => setScheduleForm(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-[#3a5a4f]/60 border border-[#4a6b5f] rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                     placeholder="Enter your full name"
                   />
                 </div>
@@ -160,7 +160,7 @@ export default function SchedulePage() {
                     required
                     value={scheduleForm.email}
                     onChange={(e) => setScheduleForm(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-[#3a5a4f]/60 border border-[#4a6b5f] rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                     placeholder="Enter your email"
                   />
                 </div>
@@ -172,7 +172,7 @@ export default function SchedulePage() {
                     type="tel"
                     value={scheduleForm.phone}
                     onChange={(e) => setScheduleForm(prev => ({ ...prev, phone: e.target.value }))}
-                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-[#3a5a4f]/60 border border-[#4a6b5f] rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -184,7 +184,7 @@ export default function SchedulePage() {
                     type="text"
                     value={scheduleForm.company}
                     onChange={(e) => setScheduleForm(prev => ({ ...prev, company: e.target.value }))}
-                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 bg-[#3a5a4f]/60 border border-[#4a6b5f] rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                     placeholder="Enter your company name"
                   />
                 </div>
@@ -203,7 +203,7 @@ export default function SchedulePage() {
                     value={scheduleForm.date}
                     onChange={(e) => setScheduleForm(prev => ({ ...prev, date: e.target.value, time: '' }))}
                     disabled={isLoadingSlots}
-                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all disabled:opacity-50"
+                    className="w-full px-4 py-3 bg-[#3a5a4f]/60 border border-[#4a6b5f] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all disabled:opacity-50"
                   >
                     <option value="">
                       {isLoadingSlots ? 'Loading dates...' : 'Select a date'}
@@ -241,7 +241,7 @@ export default function SchedulePage() {
                     value={scheduleForm.time}
                     onChange={(e) => setScheduleForm(prev => ({ ...prev, time: e.target.value }))}
                     disabled={!scheduleForm.date || isLoadingSlots}
-                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all disabled:opacity-50"
+                    className="w-full px-4 py-3 bg-[#3a5a4f]/60 border border-[#4a6b5f] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all disabled:opacity-50"
                   >
                     <option value="">
                       {!scheduleForm.date ? 'Select a date first' : 'Select a time'}
@@ -275,7 +275,7 @@ export default function SchedulePage() {
                   rows={4}
                   value={scheduleForm.message}
                   onChange={(e) => setScheduleForm(prev => ({ ...prev, message: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all resize-none"
+                  className="w-full px-4 py-3 bg-[#3a5a4f]/60 border border-[#4a6b5f] rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all resize-none"
                   placeholder="Describe your project, goals, or any specific requirements..."
                 />
               </div>
@@ -302,7 +302,7 @@ export default function SchedulePage() {
           </form>
 
           {/* Contact Information */}
-          <div className="mt-8 pt-6 border-t border-gray-700/50">
+          <div className="mt-8 pt-6 border-t border-[#4a6b5f]/50">
             <div className="text-center">
               <h4 className="text-lg font-semibold text-white mb-4">📞 Prefer to Call?</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
