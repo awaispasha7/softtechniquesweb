@@ -1,6 +1,7 @@
 // API Configuration
 // Uses env when provided, otherwise falls back to your Railway backend URL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+// Updated: Ready for production deployment
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://web-production-608ab4.up.railway.app';
 
 export const API_ENDPOINTS = {
   CHAT: `${API_BASE_URL}/chat`,
