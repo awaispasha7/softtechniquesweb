@@ -126,6 +126,7 @@ export default function SchedulePage() {
               width={48}
               height={48}
               className="object-contain rounded-2xl"
+              style={{ width: 'auto', height: 'auto' }}
             />
             <div>
               <h1 className="text-3xl font-bold text-white">Schedule a Consultation</h1>

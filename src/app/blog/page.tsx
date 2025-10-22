@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import Navbar from '../../components/Navbar';
+import ChatProvider from '../../components/ChatProvider';
 import { getBlogPosts, saveBlogPost, deleteBlogPost, updateBlogPost, BlogPost } from '../../lib/blogService';
 
 export default function BlogPage(): React.JSX.Element {
@@ -243,10 +244,11 @@ export default function BlogPage(): React.JSX.Element {
   };
 
   return (
-    <div className="min-h-screen bg-[#29473d]">
-      <div className="relative z-50">
-        <Navbar />
-      </div>
+    <ChatProvider>
+      <div className="min-h-screen bg-[#29473d]">
+        <div className="relative z-50">
+          <Navbar />
+        </div>
       
       {/* Background floating elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -656,6 +658,7 @@ export default function BlogPage(): React.JSX.Element {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </ChatProvider>
   );
 }

@@ -197,6 +197,7 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
                 width={32}
                 height={32}
                 className="object-contain rounded-lg"
+                style={{ width: 'auto', height: 'auto' }}
               />
               <div>
                 <h3 className="font-medium text-white text-xs sm:text-sm">Soft Techniques</h3>

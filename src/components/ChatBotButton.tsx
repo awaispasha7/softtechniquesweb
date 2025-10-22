@@ -30,6 +30,7 @@ export default function ChatBotButton({ className = '', isChatOpen, setChatOpen 
           width={24}
           height={24}
           className="object-contain rounded-lg"
+          style={{ width: 'auto', height: 'auto' }}
         />
         
         {/* Button Text */}

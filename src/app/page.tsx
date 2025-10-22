@@ -7,19 +7,22 @@ import CaseStudiesSection from "@/components/CaseStudiesSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import ChatProvider from "@/components/ChatProvider";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <HeroSection />
-      <ServicesSection />
-      <AboutSection />
-      <WhyChooseUsSection />
-      <CaseStudiesSection />
-      <TestimonialsSection />
-      <ContactSection />
-      <Footer />
-    </div>
+    <ChatProvider>
+      <div className="min-h-screen">
+        <Navbar />
+        <HeroSection />
+        <ServicesSection />
+        <AboutSection />
+        <WhyChooseUsSection />
+        <CaseStudiesSection />
+        <TestimonialsSection />
+        <ContactSection />
+        <Footer />
+      </div>
+    </ChatProvider>
   );
 }
