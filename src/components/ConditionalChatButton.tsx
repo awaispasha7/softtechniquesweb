@@ -1,7 +1,6 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 import ChatBotButton from './ChatBotButton';
 import { useChat } from './ChatProvider';
 
@@ -11,13 +10,6 @@ export default function ConditionalChatButton() {
   
   // Show chat button on main page and blog page, not on schedule page
   const showChatButton = pathname === '/' || pathname === '/blog';
-
-  // Close chat only when navigating to blog page
-  useEffect(() => {
-    if (isChatOpen && pathname === '/blog') {
-      setChatOpen(false);
-    }
-  }, [pathname, isChatOpen, setChatOpen]);
 
   if (!showChatButton) {
     return null;
