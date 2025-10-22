@@ -12,9 +12,9 @@ export default function ConditionalChatButton() {
   // Show chat button on main page and blog page, not on schedule page
   const showChatButton = pathname === '/' || pathname === '/blog';
 
-  // Close chat when navigating to any page
+  // Close chat only when navigating to blog page
   useEffect(() => {
-    if (isChatOpen) {
+    if (isChatOpen && pathname === '/blog') {
       setChatOpen(false);
     }
   }, [pathname, isChatOpen, setChatOpen]);
