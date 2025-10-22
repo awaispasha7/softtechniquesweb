@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { API_ENDPOINTS } from '../../config/api';
 
 export default function SchedulePage() {
@@ -119,10 +120,12 @@ export default function SchedulePage() {
           </button>
           
           <div className="flex items-center justify-center gap-3 mb-4">
-            <img
+            <Image
               src="/logo9.png"
               alt="Soft Techniques Logo"
-              className="w-12 h-12 object-contain rounded-2xl"
+              width={48}
+              height={48}
+              className="object-contain rounded-2xl"
             />
             <div>
               <h1 className="text-3xl font-bold text-white">Schedule a Consultation</h1>

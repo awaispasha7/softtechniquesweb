@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { API_ENDPOINTS } from '../config/api';
 
 interface ChatInterfaceProps {
@@ -190,10 +191,12 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
           {/* Header */}
           <div className="flex items-center justify-between p-3 sm:p-4 border-b border-[#4a6b5f] bg-[#2d4539] rounded-t-lg">
             <div className="flex items-center gap-2 sm:gap-3">
-              <img
+              <Image
                 src="/logo9.png"
                 alt="Soft Techniques Logo"
-                className="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded-lg"
+                width={32}
+                height={32}
+                className="object-contain rounded-lg"
               />
               <div>
                 <h3 className="font-medium text-white text-xs sm:text-sm">Soft Techniques</h3>

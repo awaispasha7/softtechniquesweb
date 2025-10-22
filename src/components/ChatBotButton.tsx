@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import ChatInterface from './ChatInterface';
 
 interface ChatBotButtonProps {
@@ -23,10 +24,12 @@ export default function ChatBotButton({ className = '', isChatOpen, setChatOpen 
           aria-label="Open chat bot"
         >
         {/* Chat Bot Icon */}
-        <img
+        <Image
           src="/logo9.png"
           alt="Soft Techniques Logo"
-          className="w-6 h-6 object-contain rounded-lg"
+          width={24}
+          height={24}
+          className="object-contain rounded-lg"
         />
         
         {/* Button Text */}

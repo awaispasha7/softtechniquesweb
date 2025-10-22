@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Timestamp } from 'firebase/firestore';
 import Navbar from '../../components/Navbar';
 import { getBlogPosts, saveBlogPost, deleteBlogPost, updateBlogPost, BlogPost } from '../../lib/blogService';
 
@@ -103,7 +104,7 @@ export default function BlogPage(): React.JSX.Element {
           const newBlogPost: BlogPost = {
             id: postId,
             ...postData,
-            createdAt: new Date() as any
+            createdAt: Timestamp.now()
           };
 
           setBlogPosts(prev => [newBlogPost, ...prev]);
