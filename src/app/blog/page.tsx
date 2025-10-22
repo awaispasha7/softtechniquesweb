@@ -295,7 +295,7 @@ export default function BlogPage(): React.JSX.Element {
 
         {/* Write New Post Form */}
         {isWritingMode && (
-          <div className={`mb-16 transition-all duration-1000 transform ${
+          <div className={`mb-8 transition-all duration-1000 transform ${
             animatedElements.includes(0) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-white/30 transition-all duration-500 hover:shadow-2xl hover:shadow-white/20">
