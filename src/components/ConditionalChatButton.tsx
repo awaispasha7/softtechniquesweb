@@ -8,8 +8,8 @@ export default function ConditionalChatButton() {
   const pathname = usePathname();
   const { isChatOpen, setChatOpen } = useChat();
   
-  // Only show chat button on the main page, not on schedule page
-  const showChatButton = pathname === '/';
+  // Show chat button on main page and blog page, not on schedule page
+  const showChatButton = pathname === '/' || pathname === '/blog';
 
   if (!showChatButton) {
     return null;

@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useChat } from "./ChatProvider";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
+  const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
   const { setChatOpen } = useChat();
 
   const toggleMenu = () => {
@@ -21,6 +23,30 @@ export default function Navbar() {
     setChatOpen(true);
     closeMenu(); // Close mobile menu if open
   };
+
+  const handleDropdownMouseEnter = useCallback(() => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setIsResourcesDropdownOpen(true);
+  }, [dropdownTimeout]);
+
+  const handleDropdownMouseLeave = useCallback(() => {
+    const timeout = setTimeout(() => {
+      setIsResourcesDropdownOpen(false);
+    }, 150); // Small delay to allow clicking
+    setDropdownTimeout(timeout);
+  }, []);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (dropdownTimeout) {
+        clearTimeout(dropdownTimeout);
+      }
+    };
+  }, [dropdownTimeout]);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-[9999] bg-[#29473d] backdrop-blur-sm border-b-2 border-white/20">
@@ -74,6 +100,37 @@ export default function Navbar() {
             >
               Contact
             </button>
+            
+            {/* Resources Dropdown */}
+            <div className="relative">
+              <button
+                onMouseEnter={handleDropdownMouseEnter}
+                onMouseLeave={handleDropdownMouseLeave}
+                className="text-white/90 hover:text-white transition-colors text-xs font-medium flex items-center"
+              >
+                Resources
+                <svg className="ml-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {/* Dropdown Menu */}
+              {isResourcesDropdownOpen && (
+                <div 
+                  className="absolute right-0 mt-2 w-20 bg-white/10 backdrop-blur-sm rounded-md shadow-lg py-1 z-50 transform translate-x-4 border border-white/20"
+                  onMouseEnter={handleDropdownMouseEnter}
+                  onMouseLeave={handleDropdownMouseLeave}
+                >
+                  <Link
+                    href="/blog"
+                    className="block px-4 py-2 text-xs text-white hover:bg-white/20 transition-colors duration-200 text-center"
+                    onClick={() => setIsResourcesDropdownOpen(false)}
+                  >
+                    Blog
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Desktop CTA Button */}
@@ -153,6 +210,18 @@ export default function Navbar() {
             >
               Contact
             </button>
+            
+            {/* Resources Section in Mobile Menu */}
+            <div className="py-2">
+              <div className="text-white text-base font-medium mb-2">Resources</div>
+              <Link
+                href="/blog"
+                onClick={closeMenu}
+                className="text-white/70 hover:text-white block py-1 text-sm font-medium"
+              >
+                Blog
+              </Link>
+            </div>
             <Link
               href="#about"
               onClick={closeMenu}
