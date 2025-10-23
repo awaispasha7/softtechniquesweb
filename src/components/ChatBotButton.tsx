@@ -35,7 +35,7 @@ export default function ChatBotButton({ className = '', isChatOpen, setChatOpen 
         />
         
         {/* Button Text */}
-        <span className="text-white font-semibold text-sm sm:text-base">Ask Aken</span>
+        <span className="text-white font-semibold text-sm sm:text-base">Ask SoftBot</span>
         </button>
       )}
 

@@ -55,7 +55,7 @@ export default function ChatInterface({ isOpen, onClose }: ChatInterfaceProps) {
   // Add typing effect to welcome message when chat opens
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      const welcomeText = `**Hi! I'm Aken from Soft Techniques**
+      const welcomeText = `**Hi! I'm SoftBot from Soft Techniques**
 
 I'm your **AI Solutions Expert**! I specialize in transforming businesses with cutting-edge AI technology. From custom AI models to intelligent automation, I help companies unlock their full potential through innovative solutions.
 
@@ -260,7 +260,7 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
                   <div className="flex justify-start">
                     <div className="bg-[#2d4539]/90 text-white border border-[#4a6b5f]/50 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-sm shadow-lg">
                       <div className="flex items-center gap-2 sm:gap-3">
-                        <span className="text-xs sm:text-sm text-gray-300">Aken is typing</span>
+                        <span className="text-xs sm:text-sm text-gray-300">SoftBot is typing</span>
                         <div className="flex gap-1">
                           <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-bounce"></div>
                           <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
