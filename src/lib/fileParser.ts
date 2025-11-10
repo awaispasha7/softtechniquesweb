@@ -42,7 +42,15 @@ export const parsePDF = async (file: File): Promise<ParsedDocument> => {
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
       const textContent = await page.getTextContent();
-      const pageText = textContent.items.map((item: { str?: string }) => item.str || '').join(' ');
+      const pageText = textContent.items
+        .map((item) => {
+          // Check if item has 'str' property (TextItem) vs TextMarkedContent
+          if ('str' in item && typeof item.str === 'string') {
+            return item.str;
+          }
+          return '';
+        })
+        .join(' ');
       fullText += pageText + '\n';
     }
     
