@@ -34,9 +34,10 @@ export const saveBlogPost = async (post: Omit<BlogPost, 'id' | 'createdAt'>) => 
     });
     
     return docRef.id;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Check if it's a permission error
-    if (error?.code === 'permission-denied' || error?.message?.includes('permission')) {
+    const err = error && typeof error === 'object' ? error as { code?: string; message?: string } : null;
+    if (err && (err.code === 'permission-denied' || err.message?.includes('permission'))) {
       console.error('⚠️ Firebase Permission Error: Please update Firestore security rules in Firebase Console');
       console.error('Go to: Firebase Console → Firestore Database → Rules');
       console.error('Add this rule: allow read, write: if true; for softtechniquesBlogPosts collection');
@@ -62,9 +63,10 @@ export const getBlogPosts = async (): Promise<BlogPost[]> => {
     });
     
     return posts;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Check if it's a permission error
-    if (error?.code === 'permission-denied' || error?.message?.includes('permission')) {
+    const err = error && typeof error === 'object' ? error as { code?: string; message?: string } : null;
+    if (err && (err.code === 'permission-denied' || err.message?.includes('permission'))) {
       console.error('⚠️ Firebase Permission Error: Please update Firestore security rules in Firebase Console');
       console.error('Go to: Firebase Console → Firestore Database → Rules');
       console.error('Add this rule: allow read, write: if true; for softtechniquesBlogPosts collection');
@@ -79,9 +81,10 @@ export const getBlogPosts = async (): Promise<BlogPost[]> => {
 export const deleteBlogPost = async (postId: string) => {
   try {
     await deleteDoc(doc(db, 'softtechniquesBlogPosts', postId));
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Check if it's a permission error
-    if (error?.code === 'permission-denied' || error?.message?.includes('permission')) {
+    const err = error && typeof error === 'object' ? error as { code?: string; message?: string } : null;
+    if (err && (err.code === 'permission-denied' || err.message?.includes('permission'))) {
       console.error('⚠️ Firebase Permission Error: Please update Firestore security rules in Firebase Console');
       console.error('Go to: Firebase Console → Firestore Database → Rules');
       console.error('Add this rule: allow read, write: if true; for softtechniquesBlogPosts collection');
@@ -96,9 +99,10 @@ export const deleteBlogPost = async (postId: string) => {
 export const updateBlogPost = async (postId: string, updates: Partial<BlogPost>) => {
   try {
     await updateDoc(doc(db, 'softtechniquesBlogPosts', postId), updates);
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Check if it's a permission error
-    if (error?.code === 'permission-denied' || error?.message?.includes('permission')) {
+    const err = error && typeof error === 'object' ? error as { code?: string; message?: string } : null;
+    if (err && (err.code === 'permission-denied' || err.message?.includes('permission'))) {
       console.error('⚠️ Firebase Permission Error: Please update Firestore security rules in Firebase Console');
       console.error('Go to: Firebase Console → Firestore Database → Rules');
       console.error('Add this rule: allow read, write: if true; for softtechniquesBlogPosts collection');
@@ -115,7 +119,7 @@ export const uploadBlogImage = async (file: File, postId: string): Promise<strin
     const folder = `blog-images/${postId}`;
     const imageUrl = await uploadImageToCloudinary(file, folder);
     return imageUrl;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error uploading image:', error);
     throw new Error('Failed to upload image. Please try again.');
   }

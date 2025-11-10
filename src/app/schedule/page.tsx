@@ -126,19 +126,20 @@ export default function SchedulePage() {
         setScheduleStatus({ type: 'error', message: data.message || 'There was an error scheduling your consultation. Please try again.' });
         setIsSubmitting(false);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error scheduling consultation:', error);
       console.error('Error details:', error);
       
       // More detailed error information
-      if (error && typeof error === 'object') {
-        console.error('Error status:', error.status);
-        console.error('Error text:', error.text);
+      const err = error && typeof error === 'object' ? error as { status?: number; text?: string } : null;
+      if (err) {
+        console.error('Error status:', err.status);
+        console.error('Error text:', err.text);
       }
       
       setScheduleStatus({ 
         type: 'error', 
-        message: error?.text || (error instanceof Error ? error.message : 'There was an error scheduling your consultation. Please try again or contact us directly.')
+        message: err?.text || (error instanceof Error ? error.message : 'There was an error scheduling your consultation. Please try again or contact us directly.')
       });
       setIsSubmitting(false);
     }

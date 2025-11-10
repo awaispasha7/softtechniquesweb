@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Timestamp } from 'firebase/firestore';
+// Timestamp removed - not used
 import Navbar from '../../components/Navbar';
 import ChatProvider from '../../components/ChatProvider';
 import { getBlogPosts, saveBlogPost, deleteBlogPost, updateBlogPost, uploadBlogImages, BlogPost } from '../../lib/blogService';
@@ -29,7 +29,7 @@ export default function BlogPage(): React.JSX.Element {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [uploadingDocument, setUploadingDocument] = useState(false);
-  const [documentFile, setDocumentFile] = useState<File | null>(null);
+  // documentFile removed - not used
   const [isUploadMode, setIsUploadMode] = useState(false);
   const [savingPost, setSavingPost] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -134,10 +134,14 @@ export default function BlogPage(): React.JSX.Element {
                 setBlogPosts(posts);
                 setUploadingImages(false);
               })
-              .catch((error: any) => {
+              .catch((error: unknown) => {
                 console.error('❌ Error uploading/updating images:', error);
-                console.error('Error code:', error?.code);
-                console.error('Error message:', error?.message);
+                if (error && typeof error === 'object' && 'code' in error) {
+                  console.error('Error code:', (error as { code?: string }).code);
+                }
+                if (error && typeof error === 'object' && 'message' in error) {
+                  console.error('Error message:', (error as { message?: string }).message);
+                }
                 setUploadingImages(false);
                 // Errors are logged to console, no alert shown
               });
@@ -158,7 +162,7 @@ export default function BlogPage(): React.JSX.Element {
           setImagePreviews([]);
           setIsWritingMode(false);
           setSavingPost(false);
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error('Error saving blog post:', error);
           setSavingPost(false);
           // Errors are logged to console, no alert shown
@@ -377,7 +381,7 @@ export default function BlogPage(): React.JSX.Element {
       return;
     }
 
-    setDocumentFile(file);
+    // documentFile removed - not used
     setUploadingDocument(true);
 
     try {
@@ -413,7 +417,7 @@ export default function BlogPage(): React.JSX.Element {
       setIsUploadMode(false);
       
       console.log(`✅ Document uploaded successfully! File saved to Cloudinary. Text extracted: ${parsed.text.length} characters. Images found: ${parsed.images.length}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error uploading document:', error);
       console.error('Please check: File is not password-protected, file size is under 10MB, file format is supported (.pdf, .doc, .docx)');
     } finally {
@@ -501,6 +505,7 @@ export default function BlogPage(): React.JSX.Element {
     }
     insertTextAtCursor('~~', '~~');
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatCode = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
@@ -508,6 +513,7 @@ export default function BlogPage(): React.JSX.Element {
     }
     insertTextAtCursor('`', '`');
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatSubscript = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
@@ -515,6 +521,7 @@ export default function BlogPage(): React.JSX.Element {
     }
     insertTextAtCursor('<sub>', '</sub>');
   };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatSuperscript = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
@@ -571,6 +578,7 @@ export default function BlogPage(): React.JSX.Element {
     }
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatCodeBlock = () => {
     const textarea = contentTextareaRef.current;
     if (!textarea) return;
@@ -598,6 +606,7 @@ export default function BlogPage(): React.JSX.Element {
     }
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatBlockquote = () => {
     const textarea = contentTextareaRef.current;
     if (!textarea) return;
@@ -622,6 +631,7 @@ export default function BlogPage(): React.JSX.Element {
     }, 0);
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatHorizontalRule = () => {
     const textarea = contentTextareaRef.current;
     if (!textarea) return;
@@ -649,6 +659,7 @@ export default function BlogPage(): React.JSX.Element {
     insertTextAtCursor(prefix, '');
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatLink = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();
@@ -668,6 +679,7 @@ export default function BlogPage(): React.JSX.Element {
     }
   };
   
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const formatImage = (e?: React.MouseEvent) => {
     if (e) {
       e.preventDefault();

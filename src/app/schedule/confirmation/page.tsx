@@ -2,7 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Image from 'next/image';
+// Image removed - not used
 
 // Component that uses useSearchParams - must be wrapped in Suspense
 function ConfirmationContent() {
@@ -164,4 +164,5 @@ export default function ConfirmationPage() {
     </div>
   );
 }
+
 
