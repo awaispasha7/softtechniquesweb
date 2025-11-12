@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form Message</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        
+        <!-- Header -->
+        <div style="background: linear-gradient(135deg, #29473d 0%, #1e3a2e 100%); padding: 40px 30px; text-align: center;">
+            <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 600; letter-spacing: 1px;">
+                New Contact Form Message
+            </h1>
+            <p style="color: #e2e8f0; margin: 10px 0 0 0; font-size: 16px;">
+                You have received a new message from your website
+            </p>
+        </div>
+
+        <!-- Content -->
+        <div style="padding: 40px 30px;">
+            
+            <!-- Greeting -->
+            <div style="margin-bottom: 30px;">
+                <h2 style="color: #2d3748; margin: 0 0 15px 0; font-size: 24px; font-weight: 500;">
+                    Hello! 👋
+                </h2>
+                <p style="color: #4a5568; margin: 0; font-size: 16px; line-height: 1.6;">
+                    Someone has reached out to you through your website contact form. Here are the details:
+                </p>
+            </div>
+
+            <!-- Contact Details Card -->
+            <div style="background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%); border-radius: 12px; padding: 30px; margin: 30px 0; border-left: 4px solid #29473d;">
+                
+                <!-- Name -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background-color: #29473d; border-radius: 50%; margin-right: 12px;"></div>
+                        <span style="color: #2d3748; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Name
+                        </span>
+                    </div>
+                    <p style="color: #4a5568; margin: 0; font-size: 18px; font-weight: 500; padding-left: 20px;">
+                        {{from_name}}
+                    </p>
+                </div>
+
+                <!-- Email -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background-color: #29473d; border-radius: 50%; margin-right: 12px;"></div>
+                        <span style="color: #2d3748; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Email
+                        </span>
+                    </div>
+                    <p style="color: #4a5568; margin: 0; font-size: 18px; font-weight: 500; padding-left: 20px;">
+                        <a href="mailto:{{from_email}}" style="color: #29473d; text-decoration: none;">
+                            {{from_email}}
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Message -->
+                <div>
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background-color: #29473d; border-radius: 50%; margin-right: 12px;"></div>
+                        <span style="color: #2d3748; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Message
+                        </span>
+                    </div>
+                    <div style="background-color: #ffffff; border-radius: 8px; padding: 20px; margin-left: 20px; border: 1px solid #e2e8f0;">
+                        <p style="color: #2d3748; margin: 0; font-size: 16px; line-height: 1.6; white-space: pre-wrap;">
+{{message}}
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="mailto:{{from_email}}?subject=Re: Your Contact Form Message" 
+                   style="display: inline-block; background: linear-gradient(135deg, #29473d 0%, #1e3a2e 100%); color: #ffffff; text-decoration: none; padding: 15px 30px; border-radius: 8px; font-weight: 600; font-size: 16px; margin: 0 10px; box-shadow: 0 4px 12px rgba(41, 71, 61, 0.3);">
+                    Reply to {{from_name}}
+                </a>
+            </div>
+
+            <!-- Footer -->
+            <div style="border-top: 1px solid #e2e8f0; padding-top: 30px; text-align: center;">
+                <p style="color: #718096; margin: 0 0 10px 0; font-size: 14px;">
+                    This message was sent from your website contact form
+                </p>
+                <p style="color: #a0aec0; margin: 0; font-size: 12px;">
+                    SoftTechniques - Technology Consulting & Solutions
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
+
