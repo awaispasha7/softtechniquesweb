@@ -8,7 +8,7 @@ type Status = "idle" | "starting" | "waiting" | "done" | "error";
 
 export default function GenerateVideoPage() {
   const [prompt, setPrompt] = useState("");
-  const [duration, setDuration] = useState("10");
+  const [duration, setDuration] = useState("8");
   const [status, setStatus] = useState<Status>("idle");
   const [jobId, setJobId] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -98,7 +98,7 @@ export default function GenerateVideoPage() {
 
   function reset() {
     setPrompt("");
-    setDuration("10");
+    setDuration("8");
     setJobId(null);
     setVideoUrl(null);
     setErrorMessage(null);
@@ -155,15 +155,14 @@ export default function GenerateVideoPage() {
                       Duration (seconds)
                     </label>
                     <select
-                      className="w-full md:w-48 rounded-full bg-white/5 border border-white/20 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-white/70"
+                      className="w-full md:w-48 rounded-full bg-white/5 border border-white/20 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/70"
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
                       disabled={isBusy}
                     >
-                      <option value="5">5 seconds</option>
-                      <option value="10">10 seconds</option>
-                      <option value="15">15 seconds</option>
-                      <option value="20">20 seconds</option>
+                      <option value="4" className="bg-[#29473d] text-white">4 seconds</option>
+                      <option value="8" className="bg-[#29473d] text-white">8 seconds</option>
+                      <option value="12" className="bg-[#29473d] text-white">12 seconds</option>
                     </select>
                   </div>
 
