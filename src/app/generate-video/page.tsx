@@ -13,45 +13,118 @@ export default function GenerateVideoPage() {
   const [jobId, setJobId] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loadingMessage, setLoadingMessage] = useState<string>("");
+
+  // Rotating loading messages
+  useEffect(() => {
+    if (status !== "waiting") {
+      setLoadingMessage("");
+      return;
+    }
+
+    const messages = [
+      "Building your video...",
+      "Applying AI magic...",
+      "Crafting your vision...",
+      "Rendering frames...",
+      "Adding finishing touches...",
+      "Polishing details...",
+      "Almost there...",
+      "Creating something amazing...",
+      "Working on it...",
+      "This might take a moment...",
+    ];
+
+    let messageIndex = 0;
+    setLoadingMessage(messages[0]);
+
+    const interval = setInterval(() => {
+      messageIndex = (messageIndex + 1) % messages.length;
+      setLoadingMessage(messages[messageIndex]);
+    }, 8000); // Change message every 8 seconds
+
+    return () => clearInterval(interval);
+  }, [status]);
 
   useEffect(() => {
     if (status !== "waiting" || !jobId) return;
 
-    const es = new EventSource(`/api/generate-video/stream?jobId=${jobId}`);
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 10;
+    let es: EventSource | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
 
-    es.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data) as {
-          status: "done" | "error";
-          videoUrl?: string;
-          error?: string;
-        };
-
-        if (data.status === "done") {
-          setVideoUrl(data.videoUrl || null);
-          setStatus("done");
-        } else if (data.status === "error") {
-          setErrorMessage(data.error || "Something went wrong.");
-          setStatus("error");
-        }
-      } catch (e) {
-        console.error("Failed to parse SSE message", e);
-        setErrorMessage("Failed to read server update.");
-        setStatus("error");
-      } finally {
+    const connect = () => {
+      if (es) {
         es.close();
       }
+
+      es = new EventSource(`/api/generate-video/stream?jobId=${jobId}`);
+
+      es.onmessage = (event) => {
+        try {
+          // Reset reconnect attempts on successful message
+          reconnectAttempts = 0;
+
+          const data = JSON.parse(event.data) as {
+            status: "done" | "error";
+            videoUrl?: string;
+            error?: string;
+          };
+
+          if (data.status === "done") {
+            setVideoUrl(data.videoUrl || null);
+            setStatus("done");
+            if (es) es.close();
+          } else if (data.status === "error") {
+            // Only show error when n8n explicitly sends status: "error"
+            setErrorMessage(data.error || "Video generation failed.");
+            setStatus("error");
+            if (es) es.close();
+          }
+        } catch (e) {
+          console.error("Failed to parse SSE message", e);
+          // Don't error on parse failures, just log
+        }
+      };
+
+      es.onerror = () => {
+        console.log("SSE connection issue, will retry...");
+        
+        if (es) {
+          es.close();
+          es = null;
+        }
+
+        // Only show error if we've exhausted reconnection attempts
+        if (reconnectAttempts >= maxReconnectAttempts) {
+          setErrorMessage("Connection lost. Your video is still being generated. Please refresh the page in a few minutes.");
+          setStatus("error");
+          return;
+        }
+
+        // Exponential backoff for reconnection
+        reconnectAttempts++;
+        const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000); // Max 30 seconds
+        
+        reconnectTimeout = setTimeout(() => {
+          if (status === "waiting") {
+            connect();
+          }
+        }, delay);
+      };
+
+      es.onopen = () => {
+        // Reset reconnect attempts on successful connection
+        reconnectAttempts = 0;
+      };
     };
 
-    es.onerror = () => {
-      console.error("SSE connection error");
-      setErrorMessage("Connection lost while waiting for the video.");
-      setStatus("error");
-      es.close();
-    };
+    connect();
 
     return () => {
-      es.close();
+      if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (es) es.close();
     };
   }, [status, jobId]);
 
@@ -213,11 +286,13 @@ export default function GenerateVideoPage() {
           {status === "waiting" && (
             <section>
               <div className="bg-black/20 border border-white/10 rounded-2xl p-6 flex items-center gap-4">
-                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                <div>
-                  <p className="font-semibold">Generating your video...</p>
-                  <p className="text-sm text-white/70">
-                    This usually takes a short while. Keep this tab open and
+                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin shrink-0" />
+                <div className="flex-1">
+                  <p className="font-semibold">
+                    {loadingMessage || "Generating your video..."}
+                  </p>
+                  <p className="text-sm text-white/70 mt-1">
+                    This may take 2-12 minutes. Keep this tab open and
                     we&apos;ll display the video as soon as it&apos;s ready.
                   </p>
                 </div>

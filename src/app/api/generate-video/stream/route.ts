@@ -37,9 +37,21 @@ export async function GET(req: NextRequest) {
       // Otherwise, register listener
       registerListener(jobId, send);
 
+      // Send keepalive pings every 30 seconds to keep connection alive
+      const keepaliveInterval = setInterval(() => {
+        try {
+          // Send a comment line (SSE keepalive)
+          controller.enqueue(encoder.encode(": keepalive\n\n"));
+        } catch {
+          // Connection closed, stop keepalive
+          clearInterval(keepaliveInterval);
+        }
+      }, 30000);
+
       // Handle client disconnect
       const abort = req.signal;
       abort.addEventListener("abort", () => {
+        clearInterval(keepaliveInterval);
         try {
           controller.close();
         } catch {
