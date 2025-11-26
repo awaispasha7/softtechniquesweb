@@ -68,29 +68,51 @@ export default function GenerateVideoPage() {
     setStatus("starting");
 
     try {
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
       const res = await fetch("/api/generate-video", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ prompt, duration }),
+        signal: controller.signal,
       });
 
-      type ApiErrorResponse = { error?: string };
+      clearTimeout(timeoutId);
+
+      type ApiErrorResponse = { error?: string; details?: string };
       if (!res.ok) {
         const data: ApiErrorResponse = await res
           .json()
           .catch(() => ({} as ApiErrorResponse));
-        throw new Error(data.error || "Failed to start video generation.");
+        const errorMsg = data.error || "Failed to start video generation.";
+        const details = data.details ? ` ${data.details}` : "";
+        throw new Error(errorMsg + details);
       }
 
       const data: { jobId?: string } = await res.json();
-      setJobId(data.jobId ?? null);
+      
+      if (!data.jobId) {
+        throw new Error("Server did not return a job ID. Please check server logs.");
+      }
+
+      setJobId(data.jobId);
       setStatus("waiting");
     } catch (err: unknown) {
-      console.error(err);
-      const message =
-        err instanceof Error ? err.message : "Something went wrong.";
+      console.error("Error starting video generation:", err);
+      let message = "Something went wrong.";
+      
+      if (err instanceof Error) {
+        if (err.name === "AbortError") {
+          message = "Request timed out. Please check your n8n webhook configuration.";
+        } else {
+          message = err.message;
+        }
+      }
+      
       setErrorMessage(message);
       setStatus("error");
     }
