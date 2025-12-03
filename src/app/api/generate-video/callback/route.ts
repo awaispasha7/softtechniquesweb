@@ -53,9 +53,10 @@ export async function POST(req: NextRequest) {
       error: status === "error" ? String(error || "Unknown error") : undefined,
     };
 
-    console.log(`Notifying job complete for jobId: ${jobId}`, result);
+    console.log(`[Callback] Notifying job complete for jobId: ${jobId}`, result);
+    console.log(`[Callback] IMPORTANT: This jobId must match the one returned by the start webhook: ${jobId}`);
     notifyJobComplete(jobId, result);
-    console.log(`Successfully notified job complete for jobId: ${jobId}`);
+    console.log(`[Callback] Successfully notified job complete for jobId: ${jobId}`);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

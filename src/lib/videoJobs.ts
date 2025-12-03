@@ -46,7 +46,12 @@ export function notifyJobComplete(jobId: string, result: JobResult) {
 }
 
 export function getJobResult(jobId: string): JobResult | undefined {
-  return results.get(jobId);
+  const result = results.get(jobId);
+  console.log(`[videoJobs] getJobResult called for jobId: ${jobId}, found:`, result ? "yes" : "no");
+  if (!result) {
+    console.log(`[videoJobs] Current stored jobIds:`, Array.from(results.keys()));
+  }
+  return result;
 }
 
 

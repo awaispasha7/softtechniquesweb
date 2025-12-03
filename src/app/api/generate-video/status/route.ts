@@ -13,14 +13,17 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  console.log(`[Status] Checking status for jobId: ${jobId}`);
   const result = getJobResult(jobId);
 
   if (!result) {
+    console.log(`[Status] No result found for jobId: ${jobId}, returning pending`);
     return NextResponse.json({
       status: "pending",
     });
   }
 
+  console.log(`[Status] Found result for jobId: ${jobId}`, result);
   return NextResponse.json(result);
 }
 

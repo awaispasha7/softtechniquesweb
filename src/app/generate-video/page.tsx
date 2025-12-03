@@ -58,11 +58,15 @@ export default function GenerateVideoPage() {
     // Fallback: Check status via API every 5 seconds as backup
     const checkStatus = async () => {
       try {
+        console.log("[Frontend] Checking status for jobId:", jobId);
         const res = await fetch(`/api/generate-video/status?jobId=${jobId}`);
-        if (!res.ok) return;
+        if (!res.ok) {
+          console.error("[Frontend] Status check failed with status:", res.status);
+          return;
+        }
         
         const data = await res.json();
-        console.log("[Frontend] Status check result:", data);
+        console.log("[Frontend] Status check result for jobId", jobId, ":", data);
         
         if (data.status === "done") {
           console.log("[Frontend] Status check found video done, videoUrl:", data.videoUrl);
@@ -218,20 +222,23 @@ export default function GenerateVideoPage() {
         throw new Error("Server did not return a job ID. Please check server logs.");
       }
 
+      console.log("[Frontend] Received jobId from server:", data.jobId);
       setJobId(data.jobId);
       setStatus("waiting");
       
       // Immediately check status in case job already completed
       setTimeout(() => {
+        console.log("[Frontend] Performing immediate status check for jobId:", data.jobId);
         fetch(`/api/generate-video/status?jobId=${data.jobId}`)
           .then(res => res.json())
-          .then(data => {
-            if (data.status === "done" && data.videoUrl) {
+          .then(statusData => {
+            console.log("[Frontend] Immediate status check response:", statusData);
+            if (statusData.status === "done" && statusData.videoUrl) {
               console.log("[Frontend] Immediate status check found completed job");
-              setVideoUrl(data.videoUrl);
+              setVideoUrl(statusData.videoUrl);
               setStatus("done");
-            } else if (data.status === "error") {
-              setErrorMessage(data.error || "Video generation failed.");
+            } else if (statusData.status === "error") {
+              setErrorMessage(statusData.error || "Video generation failed.");
               setStatus("error");
             }
           })
