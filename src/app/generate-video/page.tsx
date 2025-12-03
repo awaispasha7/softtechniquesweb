@@ -53,6 +53,37 @@ export default function GenerateVideoPage() {
     const maxReconnectAttempts = 10;
     let es: EventSource | null = null;
     let reconnectTimeout: NodeJS.Timeout | null = null;
+    let statusCheckInterval: NodeJS.Timeout | null = null;
+
+    // Fallback: Check status via API every 5 seconds as backup
+    const checkStatus = async () => {
+      try {
+        const res = await fetch(`/api/generate-video/status?jobId=${jobId}`);
+        if (!res.ok) return;
+        
+        const data = await res.json();
+        console.log("[Frontend] Status check result:", data);
+        
+        if (data.status === "done") {
+          console.log("[Frontend] Status check found video done, videoUrl:", data.videoUrl);
+          setVideoUrl(data.videoUrl || null);
+          setStatus("done");
+          if (es) es.close();
+          if (statusCheckInterval) clearInterval(statusCheckInterval);
+        } else if (data.status === "error") {
+          console.log("[Frontend] Status check found error:", data.error);
+          setErrorMessage(data.error || "Video generation failed.");
+          setStatus("error");
+          if (es) es.close();
+          if (statusCheckInterval) clearInterval(statusCheckInterval);
+        }
+      } catch (err) {
+        console.error("[Frontend] Status check failed:", err);
+      }
+    };
+
+    // Start periodic status checks
+    statusCheckInterval = setInterval(checkStatus, 5000);
 
     const connect = () => {
       if (es) {
@@ -87,12 +118,14 @@ export default function GenerateVideoPage() {
             setVideoUrl(data.videoUrl || null);
             setStatus("done");
             if (es) es.close();
+            if (statusCheckInterval) clearInterval(statusCheckInterval);
           } else if (data.status === "error") {
             // Only show error when n8n explicitly sends status: "error"
             console.log("[Frontend] Video generation error:", data.error);
             setErrorMessage(data.error || "Video generation failed.");
             setStatus("error");
             if (es) es.close();
+            if (statusCheckInterval) clearInterval(statusCheckInterval);
           }
         } catch (e) {
           console.error("[Frontend] Failed to parse SSE message", e, "Raw data:", event.data);
@@ -110,8 +143,8 @@ export default function GenerateVideoPage() {
 
         // Only show error if we've exhausted reconnection attempts
         if (reconnectAttempts >= maxReconnectAttempts) {
-          setErrorMessage("Connection lost. Your video is still being generated. Please refresh the page in a few minutes.");
-          setStatus("error");
+          console.log("[Frontend] Max reconnect attempts reached, relying on status checks");
+          // Don't set error status - let status checks handle it
           return;
         }
 
@@ -136,6 +169,7 @@ export default function GenerateVideoPage() {
 
     return () => {
       if (reconnectTimeout) clearTimeout(reconnectTimeout);
+      if (statusCheckInterval) clearInterval(statusCheckInterval);
       if (es) es.close();
     };
   }, [status, jobId]);
@@ -186,6 +220,23 @@ export default function GenerateVideoPage() {
 
       setJobId(data.jobId);
       setStatus("waiting");
+      
+      // Immediately check status in case job already completed
+      setTimeout(() => {
+        fetch(`/api/generate-video/status?jobId=${data.jobId}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.status === "done" && data.videoUrl) {
+              console.log("[Frontend] Immediate status check found completed job");
+              setVideoUrl(data.videoUrl);
+              setStatus("done");
+            } else if (data.status === "error") {
+              setErrorMessage(data.error || "Video generation failed.");
+              setStatus("error");
+            }
+          })
+          .catch(err => console.error("[Frontend] Immediate status check failed:", err));
+      }, 1000);
     } catch (err: unknown) {
       console.error("Error starting video generation:", err);
       let message = "Something went wrong.";

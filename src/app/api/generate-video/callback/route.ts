@@ -36,9 +36,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Ensure videoUrl is a valid string if status is done
+    let finalVideoUrl: string | undefined;
+    if (status === "done") {
+      const urlStr = String(videoUrl || "").trim();
+      if (urlStr && urlStr.length > 0) {
+        finalVideoUrl = urlStr;
+      } else {
+        console.warn(`[Callback] Job ${jobId} marked as done but videoUrl is empty`);
+      }
+    }
+
     const result: JobResult = {
       status,
-      videoUrl: status === "done" ? String(videoUrl || "") : undefined,
+      videoUrl: finalVideoUrl,
       error: status === "error" ? String(error || "Unknown error") : undefined,
     };
 
