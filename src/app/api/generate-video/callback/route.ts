@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     console.log("[Callback] Received body:", JSON.stringify(body, null, 2));
     
-    const { jobId, status, videoUrl, error } = body ?? {};
+    const { jobId, status, videoUrl, videoName, error } = body ?? {};
 
     if (!jobId || typeof jobId !== "string") {
       console.error("[Callback] Missing or invalid jobId:", jobId);
@@ -58,6 +58,7 @@ export async function POST(req: NextRequest) {
     const result: JobResult = {
       status,
       videoUrl: finalVideoUrl,
+      videoName: status === "done" && videoName ? String(videoName).trim() : undefined,
       error: status === "error" ? String(error || "Unknown error") : undefined,
     };
 

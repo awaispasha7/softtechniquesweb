@@ -5,6 +5,7 @@ export type JobStatus = "pending" | "done" | "error";
 export interface JobResult {
   status: JobStatus;
   videoUrl?: string;
+  videoName?: string;
   error?: string;
 }
 

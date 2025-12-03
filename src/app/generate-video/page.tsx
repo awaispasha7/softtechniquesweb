@@ -12,6 +12,7 @@ export default function GenerateVideoPage() {
   const [status, setStatus] = useState<Status>("idle");
   const [jobId, setJobId] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoName, setVideoName] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loadingMessage, setLoadingMessage] = useState<string>("");
 
@@ -74,8 +75,9 @@ export default function GenerateVideoPage() {
         console.log("[Frontend] Status check result for jobId", jobId, ":", data);
         
         if (data.status === "done") {
-          console.log("[Frontend] Status check found video done, videoUrl:", data.videoUrl);
+          console.log("[Frontend] Status check found video done, videoUrl:", data.videoUrl, "videoName:", data.videoName);
           setVideoUrl(data.videoUrl || null);
+          setVideoName(data.videoName || null);
           setStatus("done");
           if (es) es.close();
           if (statusCheckInterval) clearInterval(statusCheckInterval);
@@ -117,14 +119,16 @@ export default function GenerateVideoPage() {
           const data = JSON.parse(event.data) as {
             status: "done" | "error";
             videoUrl?: string;
+            videoName?: string;
             error?: string;
           };
 
           console.log("[Frontend] Parsed SSE data:", data);
 
           if (data.status === "done") {
-            console.log("[Frontend] Video generation done, videoUrl:", data.videoUrl);
+            console.log("[Frontend] Video generation done, videoUrl:", data.videoUrl, "videoName:", data.videoName);
             setVideoUrl(data.videoUrl || null);
+            setVideoName(data.videoName || null);
             setStatus("done");
             if (es) es.close();
             if (statusCheckInterval) clearInterval(statusCheckInterval);
@@ -276,6 +280,7 @@ export default function GenerateVideoPage() {
     setDuration("10");
     setJobId(null);
     setVideoUrl(null);
+    setVideoName(null);
     setErrorMessage(null);
     setStatus("idle");
   }
@@ -381,7 +386,12 @@ export default function GenerateVideoPage() {
 
           {status === "done" && videoUrl && (
             <section className="space-y-4">
-              <h2 className="text-2xl font-semibold">Your video</h2>
+              <div>
+                <h2 className="text-2xl font-semibold">Your video</h2>
+                {videoName && (
+                  <p className="text-lg text-white/80 mt-2">{videoName}</p>
+                )}
+              </div>
               <div className="bg-black/40 border border-white/10 rounded-2xl p-4">
                 <video
                   className="w-full max-w-3xl mx-auto rounded-xl shadow-2xl"
