@@ -1,5 +1,6 @@
 // softtechniquesweb/src/app/api/generate-video/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import { getAllJobIds } from "@/lib/videoJobs";
 
 type N8nStartResponse = {
   jobId?: string;
@@ -78,41 +79,49 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const responseText = await n8nRes.text();
-    let data: N8nStartResponse;
+    // n8n webhook doesn't return jobId - it will call the callback immediately with { jobId } to register it
+    // We'll wait a short time for the callback to register the job, then return the jobId
+    console.log("[Start] n8n webhook called successfully. Waiting for callback to register jobId...");
     
-    try {
-      data = JSON.parse(responseText) as N8nStartResponse;
-    } catch (parseErr) {
-      console.error("Failed to parse n8n response:", responseText);
+    // Get all existing jobIds before the webhook call
+    const existingJobIds = new Set(getAllJobIds());
+    console.log("[Start] Existing jobIds before webhook:", Array.from(existingJobIds));
+    
+    // Wait up to 3 seconds for callback to register the job
+    const maxWaitTime = 3000; // 3 seconds
+    const checkInterval = 100; // Check every 100ms
+    const startTime = Date.now();
+    
+    let registeredJobId: string | null = null;
+    
+    while (Date.now() - startTime < maxWaitTime) {
+      // Check if a new job was registered
+      const currentJobIds = getAllJobIds();
+      const newJobIds = currentJobIds.filter(id => !existingJobIds.has(id));
+      
+      if (newJobIds.length > 0) {
+        registeredJobId = newJobIds[0]; // Take the first new jobId
+        console.log("[Start] Found newly registered jobId from callback:", registeredJobId);
+        break;
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, checkInterval));
+    }
+    
+    if (!registeredJobId) {
+      console.error("[Start] No jobId was registered by callback within 3 seconds");
+      console.error("[Start] Current jobIds:", getAllJobIds());
       return NextResponse.json(
         {
-          error: "n8n returned invalid JSON response.",
-          details: `Response was: ${responseText.substring(0, 200)}`,
+          error: "Job registration timeout.",
+          details: "n8n did not call the callback to register the jobId within 3 seconds. Make sure your n8n workflow calls the callback endpoint immediately after the webhook with { jobId }.",
         },
-        { status: 502 }
+        { status: 504 }
       );
     }
-
-    const jobId = data.jobId ?? data.id ?? data.workflowId;
-
-    console.log("[Start] n8n webhook response:", JSON.stringify(data, null, 2));
-    console.log("[Start] Extracted jobId:", jobId);
-
-    if (!jobId || typeof jobId !== "string") {
-      console.error("[Start] n8n response missing jobId. Full response:", JSON.stringify(data, null, 2));
-      return NextResponse.json(
-        {
-          error: "n8n did not return a valid jobId.",
-          details: `Expected jobId, id, or workflowId in the response. Received: ${JSON.stringify(data)}. Make sure your n8n webhook node returns a JSON object with a 'jobId' field containing the same jobId that will be used in the callback.`,
-        },
-        { status: 500 }
-      );
-    }
-
-    console.log("[Start] Successfully extracted jobId from n8n:", jobId);
-    console.log("[Start] Returning jobId to frontend. IMPORTANT: n8n callback must use this EXACT jobId:", jobId);
-    return NextResponse.json({ jobId });
+    
+    console.log("[Start] Returning registered jobId to frontend:", registeredJobId);
+    return NextResponse.json({ jobId: registeredJobId });
   } catch (err) {
     console.error("Error in /api/generate-video:", err);
     return NextResponse.json(

@@ -25,6 +25,17 @@ export function registerListener(jobId: string, listener: Listener) {
   listeners.set(jobId, listener);
 }
 
+export function registerJob(jobId: string) {
+  console.log(`[videoJobs] registerJob called for jobId: ${jobId}`);
+  // Register job as pending if it doesn't exist
+  if (!results.has(jobId)) {
+    results.set(jobId, { status: "pending" });
+    console.log(`[videoJobs] Registered new job as pending: ${jobId}`);
+  } else {
+    console.log(`[videoJobs] Job ${jobId} already exists, skipping registration`);
+  }
+}
+
 export function notifyJobComplete(jobId: string, result: JobResult) {
   console.log(`[videoJobs] notifyJobComplete called for jobId: ${jobId}`, result);
   results.set(jobId, result);
@@ -52,6 +63,10 @@ export function getJobResult(jobId: string): JobResult | undefined {
     console.log(`[videoJobs] Current stored jobIds:`, Array.from(results.keys()));
   }
   return result;
+}
+
+export function getAllJobIds(): string[] {
+  return Array.from(results.keys());
 }
 
 

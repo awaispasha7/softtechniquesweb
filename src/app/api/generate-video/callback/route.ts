@@ -1,6 +1,6 @@
 // softtechniquesweb/src/app/api/generate-video/callback/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { notifyJobComplete, JobResult } from "@/lib/videoJobs";
+import { notifyJobComplete, registerJob, JobResult } from "@/lib/videoJobs";
 
 export async function POST(req: NextRequest) {
   const secretHeader = req.headers.get("x-n8n-secret");
@@ -16,22 +16,30 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    console.log("Callback received body:", JSON.stringify(body, null, 2));
+    console.log("[Callback] Received body:", JSON.stringify(body, null, 2));
     
     const { jobId, status, videoUrl, error } = body ?? {};
 
     if (!jobId || typeof jobId !== "string") {
-      console.error("Callback missing or invalid jobId:", jobId);
+      console.error("[Callback] Missing or invalid jobId:", jobId);
       return NextResponse.json(
         { error: "jobId is required." },
         { status: 400 }
       );
     }
 
+    // Case 1: Initial registration - just jobId (no status)
+    if (!status) {
+      console.log(`[Callback] Initial registration for jobId: ${jobId}`);
+      registerJob(jobId);
+      return NextResponse.json({ ok: true, message: "Job registered" });
+    }
+
+    // Case 2: Completion notification - jobId + status + (videoUrl or error)
     if (status !== "done" && status !== "error") {
-      console.error("Callback invalid status:", status);
+      console.error("[Callback] Invalid status:", status);
       return NextResponse.json(
-        { error: "Invalid status." },
+        { error: "Invalid status. Must be 'done' or 'error'." },
         { status: 400 }
       );
     }
@@ -54,13 +62,12 @@ export async function POST(req: NextRequest) {
     };
 
     console.log(`[Callback] Notifying job complete for jobId: ${jobId}`, result);
-    console.log(`[Callback] IMPORTANT: This jobId must match the one returned by the start webhook: ${jobId}`);
     notifyJobComplete(jobId, result);
     console.log(`[Callback] Successfully notified job complete for jobId: ${jobId}`);
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, message: "Job completed" });
   } catch (err) {
-    console.error("Error in /api/generate-video/callback:", err);
+    console.error("[Callback] Error:", err);
     return NextResponse.json(
       { error: "Unexpected server error." },
       { status: 500 }

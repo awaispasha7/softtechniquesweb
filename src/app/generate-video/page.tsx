@@ -47,7 +47,12 @@ export default function GenerateVideoPage() {
   }, [status]);
 
   useEffect(() => {
-    if (status !== "waiting" || !jobId) return;
+    if (status !== "waiting" || !jobId) {
+      console.log("[Frontend] useEffect skipped - status:", status, "jobId:", jobId);
+      return;
+    }
+    
+    console.log("[Frontend] Starting SSE and status checks for jobId:", jobId);
 
     let reconnectAttempts = 0;
     const maxReconnectAttempts = 10;
@@ -216,13 +221,18 @@ export default function GenerateVideoPage() {
         throw new Error(errorMsg + details);
       }
 
-      const data: { jobId?: string } = await res.json();
+      const responseData = await res.json();
+      console.log("[Frontend] Full response from /api/generate-video:", responseData);
+      
+      const data: { jobId?: string } = responseData;
       
       if (!data.jobId) {
+        console.error("[Frontend] Server response missing jobId. Full response:", responseData);
         throw new Error("Server did not return a job ID. Please check server logs.");
       }
 
       console.log("[Frontend] Received jobId from server:", data.jobId);
+      console.log("[Frontend] Setting jobId state to:", data.jobId);
       setJobId(data.jobId);
       setStatus("waiting");
       
