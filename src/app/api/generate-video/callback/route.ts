@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   const expectedSecret = process.env.N8N_CALLBACK_SECRET;
 
   if (!expectedSecret || secretHeader !== expectedSecret) {
+    console.error("Callback unauthorized - secret mismatch or missing");
     return NextResponse.json(
       { error: "Unauthorized." },
       { status: 401 }
@@ -15,9 +16,12 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
+    console.log("Callback received body:", JSON.stringify(body, null, 2));
+    
     const { jobId, status, videoUrl, error } = body ?? {};
 
     if (!jobId || typeof jobId !== "string") {
+      console.error("Callback missing or invalid jobId:", jobId);
       return NextResponse.json(
         { error: "jobId is required." },
         { status: 400 }
@@ -25,6 +29,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (status !== "done" && status !== "error") {
+      console.error("Callback invalid status:", status);
       return NextResponse.json(
         { error: "Invalid status." },
         { status: 400 }
@@ -37,7 +42,9 @@ export async function POST(req: NextRequest) {
       error: status === "error" ? String(error || "Unknown error") : undefined,
     };
 
+    console.log(`Notifying job complete for jobId: ${jobId}`, result);
     notifyJobComplete(jobId, result);
+    console.log(`Successfully notified job complete for jobId: ${jobId}`);
 
     return NextResponse.json({ ok: true });
   } catch (err) {

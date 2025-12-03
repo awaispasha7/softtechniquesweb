@@ -66,24 +66,36 @@ export default function GenerateVideoPage() {
           // Reset reconnect attempts on successful message
           reconnectAttempts = 0;
 
+          console.log("[Frontend] SSE message received:", event.data);
+          
+          // Skip keepalive comments
+          if (event.data.trim().startsWith(":")) {
+            console.log("[Frontend] SSE keepalive received, ignoring");
+            return;
+          }
+
           const data = JSON.parse(event.data) as {
             status: "done" | "error";
             videoUrl?: string;
             error?: string;
           };
 
+          console.log("[Frontend] Parsed SSE data:", data);
+
           if (data.status === "done") {
+            console.log("[Frontend] Video generation done, videoUrl:", data.videoUrl);
             setVideoUrl(data.videoUrl || null);
             setStatus("done");
             if (es) es.close();
           } else if (data.status === "error") {
             // Only show error when n8n explicitly sends status: "error"
+            console.log("[Frontend] Video generation error:", data.error);
             setErrorMessage(data.error || "Video generation failed.");
             setStatus("error");
             if (es) es.close();
           }
         } catch (e) {
-          console.error("Failed to parse SSE message", e);
+          console.error("[Frontend] Failed to parse SSE message", e, "Raw data:", event.data);
           // Don't error on parse failures, just log
         }
       };

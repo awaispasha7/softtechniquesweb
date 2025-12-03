@@ -26,12 +26,22 @@ export function registerListener(jobId: string, listener: Listener) {
 }
 
 export function notifyJobComplete(jobId: string, result: JobResult) {
+  console.log(`[videoJobs] notifyJobComplete called for jobId: ${jobId}`, result);
   results.set(jobId, result);
 
   const listener = listeners.get(jobId);
   if (listener) {
-    listener(result);
-    listeners.delete(jobId);
+    console.log(`[videoJobs] Found listener for jobId: ${jobId}, calling it`);
+    try {
+      listener(result);
+      listeners.delete(jobId);
+      console.log(`[videoJobs] Successfully notified listener for jobId: ${jobId}`);
+    } catch (error) {
+      console.error(`[videoJobs] Error calling listener for jobId: ${jobId}`, error);
+      listeners.delete(jobId);
+    }
+  } else {
+    console.log(`[videoJobs] No listener found for jobId: ${jobId}, result stored for later retrieval`);
   }
 }
 
