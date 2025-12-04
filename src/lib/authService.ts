@@ -37,7 +37,8 @@ export const signUp = async (
     }
     
     // Create user document in Firestore
-    const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
+    // Use NEXT_PUBLIC_ADMIN_EMAILS for client-side access
+    const ADMIN_EMAILS = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
     const isUnlimited = ADMIN_EMAILS.includes(email);
     
     const userData: Omit<UserData, 'uid'> = {
@@ -113,14 +114,15 @@ export const signInWithGoogle = async (): Promise<UserCredential> => {
     // Check if user document exists in Firestore
     const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
     
+    const email = userCredential.user.email || '';
+    const displayName = userCredential.user.displayName || userCredential.user.email?.split('@')[0] || 'User';
+    
+    // Check admin emails (use NEXT_PUBLIC_ADMIN_EMAILS for client-side access)
+    const ADMIN_EMAILS = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
+    const isUnlimited = ADMIN_EMAILS.includes(email);
+    
     if (!userDoc.exists()) {
       // First time Google sign-in - create user document
-      const email = userCredential.user.email || '';
-      const displayName = userCredential.user.displayName || userCredential.user.email?.split('@')[0] || 'User';
-      
-      const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
-      const isUnlimited = ADMIN_EMAILS.includes(email);
-      
       const userData: Omit<UserData, 'uid'> = {
         email,
         displayName,
@@ -131,14 +133,27 @@ export const signInWithGoogle = async (): Promise<UserCredential> => {
       };
       
       await setDoc(doc(db, 'users', userCredential.user.uid), userData);
-      console.log('✅ New Google user created in Firestore:', userCredential.user.uid);
+      console.log('✅ New Google user created in Firestore:', userCredential.user.uid, isUnlimited ? '(Admin)' : '');
     } else {
-      // Update last login time for existing user
+      // Update last login time and admin status
+      const existingData = userDoc.data();
+      
+      // Always update admin status based on current admin emails list
       await setDoc(
         doc(db, 'users', userCredential.user.uid),
-        { updatedAt: serverTimestamp() },
+        { 
+          updatedAt: serverTimestamp(),
+          isUnlimited: isUnlimited, // Always set based on current admin list
+          // Update email and displayName if they changed
+          email: email || existingData.email,
+          displayName: displayName || existingData.displayName || email.split('@')[0],
+        },
         { merge: true }
       );
+      
+      if (isUnlimited && !existingData.isUnlimited) {
+        console.log('✅ User admin status updated to unlimited:', userCredential.user.uid);
+      }
     }
     
     return userCredential;

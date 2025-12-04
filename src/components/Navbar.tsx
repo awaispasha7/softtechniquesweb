@@ -4,12 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useCallback, useEffect } from "react";
 import { useChat } from "./ChatProvider";
+import { useAuth } from "./AuthProvider";
+import { signOutUser } from "@/lib/authService";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
   const { setChatOpen } = useChat();
+  const { user, userData } = useAuth();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -38,6 +42,30 @@ export default function Navbar() {
     }, 150); // Small delay to allow clicking
     setDropdownTimeout(timeout);
   }, []);
+
+  const handleAccountDropdownMouseEnter = useCallback(() => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+    setIsAccountDropdownOpen(true);
+  }, [dropdownTimeout]);
+
+  const handleAccountDropdownMouseLeave = useCallback(() => {
+    const timeout = setTimeout(() => {
+      setIsAccountDropdownOpen(false);
+    }, 150);
+    setDropdownTimeout(timeout);
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+      setIsAccountDropdownOpen(false);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -133,8 +161,42 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Desktop CTA Button - Show on large tablets and up */}
-          <div className="hidden lg:flex items-center flex-shrink-0">
+          {/* Account Icon & CTA Button - Show on large tablets and up */}
+          <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+            {user ? (
+              <div className="relative">
+                <button
+                  onMouseEnter={handleAccountDropdownMouseEnter}
+                  onMouseLeave={handleAccountDropdownMouseLeave}
+                  className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors duration-200 border border-white/30"
+                  aria-label="Account menu"
+                >
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </button>
+                
+                {/* Account Dropdown Menu */}
+                {isAccountDropdownOpen && (
+                  <div 
+                    className="absolute right-0 mt-2 w-48 bg-white/10 backdrop-blur-sm rounded-md shadow-lg py-1 z-50 border border-white/20"
+                    onMouseEnter={handleAccountDropdownMouseEnter}
+                    onMouseLeave={handleAccountDropdownMouseLeave}
+                  >
+                    <div className="px-4 py-2 border-b border-white/20">
+                      <p className="text-sm text-white font-medium truncate">{userData?.displayName || user.email}</p>
+                      <p className="text-xs text-white/70 truncate">{user.email}</p>
+                    </div>
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full text-left px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors duration-200"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : null}
             <Link
               href="#about"
               className="bg-white text-[#29473d] px-4 xl:px-6 py-1.5 xl:py-2 rounded-full font-medium text-sm xl:text-base hover:bg-white/90 transition-colors whitespace-nowrap"
@@ -222,6 +284,20 @@ export default function Navbar() {
                 Blog
               </Link>
             </div>
+            {user && (
+              <div className="py-2 border-t border-white/20 mt-2">
+                <div className="text-white text-sm font-medium mb-1">{userData?.displayName || user.email}</div>
+                <button
+                  onClick={() => {
+                    handleSignOut();
+                    closeMenu();
+                  }}
+                  className="w-full text-left text-white/70 hover:text-white text-sm font-medium"
+                >
+                  Sign Out
+                </button>
+              </div>
+            )}
             <Link
               href="#about"
               onClick={closeMenu}

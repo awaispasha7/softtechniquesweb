@@ -86,22 +86,24 @@ export const getBlogPosts = async (): Promise<BlogPost[]> => {
   }
 };
 
-// Delete a blog post from Firebase (requires userId to verify ownership)
-export const deleteBlogPost = async (postId: string, userId: string) => {
+// Delete a blog post from Firebase (requires userId to verify ownership, unless user is admin)
+export const deleteBlogPost = async (postId: string, userId: string, isAdminUser: boolean = false) => {
   if (!userId) {
     throw new Error('User must be authenticated to delete blog posts.');
   }
   
   try {
-    // Verify ownership before deleting
-    const postDoc = await getDoc(doc(db, 'softtechniquesBlogPosts', postId));
-    if (!postDoc.exists()) {
-      throw new Error('Blog post not found.');
-    }
-    
-    const postData = postDoc.data() as BlogPost;
-    if (postData.userId !== userId) {
-      throw new Error('You can only delete your own blog posts.');
+    // Verify ownership before deleting (unless user is admin)
+    if (!isAdminUser) {
+      const postDoc = await getDoc(doc(db, 'softtechniquesBlogPosts', postId));
+      if (!postDoc.exists()) {
+        throw new Error('Blog post not found.');
+      }
+      
+      const postData = postDoc.data() as BlogPost;
+      if (postData.userId !== userId) {
+        throw new Error('You can only delete your own blog posts.');
+      }
     }
     
     await deleteDoc(doc(db, 'softtechniquesBlogPosts', postId));
@@ -119,22 +121,24 @@ export const deleteBlogPost = async (postId: string, userId: string) => {
   }
 };
 
-// Update a blog post in Firebase (requires userId to verify ownership)
-export const updateBlogPost = async (postId: string, updates: Partial<BlogPost>, userId: string) => {
+// Update a blog post in Firebase (requires userId to verify ownership, unless user is admin)
+export const updateBlogPost = async (postId: string, updates: Partial<BlogPost>, userId: string, isAdminUser: boolean = false) => {
   if (!userId) {
     throw new Error('User must be authenticated to update blog posts.');
   }
   
   try {
-    // Verify ownership before updating
-    const postDoc = await getDoc(doc(db, 'softtechniquesBlogPosts', postId));
-    if (!postDoc.exists()) {
-      throw new Error('Blog post not found.');
-    }
-    
-    const postData = postDoc.data() as BlogPost;
-    if (postData.userId !== userId) {
-      throw new Error('You can only update your own blog posts.');
+    // Verify ownership before updating (unless user is admin)
+    if (!isAdminUser) {
+      const postDoc = await getDoc(doc(db, 'softtechniquesBlogPosts', postId));
+      if (!postDoc.exists()) {
+        throw new Error('Blog post not found.');
+      }
+      
+      const postData = postDoc.data() as BlogPost;
+      if (postData.userId !== userId) {
+        throw new Error('You can only update your own blog posts.');
+      }
     }
     
     await updateDoc(doc(db, 'softtechniquesBlogPosts', postId), updates);
