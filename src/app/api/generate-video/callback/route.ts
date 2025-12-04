@@ -90,21 +90,28 @@ export async function POST(req: NextRequest) {
     console.log(`[Callback] Successfully notified job complete for jobId: ${jobId}`);
 
     // Save to Firestore if video was successfully generated
-    if (status === "done" && finalVideoUrl && prompt && duration) {
-      try {
-        await saveGeneratedVideo({
-          jobId,
-          videoUrl: finalVideoUrl,
-          videoName: videoName ? String(videoName).trim() : undefined,
-          prompt: String(prompt),
-          duration: Number(duration),
-          status: "done",
-        });
-        console.log(`[Callback] Saved video to Firestore for jobId: ${jobId}`);
-      } catch (firestoreError) {
-        console.error(`[Callback] Error saving to Firestore for jobId: ${jobId}`, firestoreError);
-        // Don't fail the callback if Firestore save fails
+    if (status === "done" && finalVideoUrl) {
+      // Check if prompt and duration are provided
+      if (!prompt || !duration) {
+        console.warn(`[Callback] Missing prompt or duration for jobId: ${jobId}. Prompt: ${prompt}, Duration: ${duration}. Video will not be saved to Firestore.`);
+      } else {
+        try {
+          await saveGeneratedVideo({
+            jobId,
+            videoUrl: finalVideoUrl,
+            videoName: videoName ? String(videoName).trim() : undefined,
+            prompt: String(prompt),
+            duration: Number(duration),
+            status: "done",
+          });
+          console.log(`[Callback] ✅ Saved video to Firestore for jobId: ${jobId}`);
+        } catch (firestoreError) {
+          console.error(`[Callback] ❌ Error saving to Firestore for jobId: ${jobId}`, firestoreError);
+          // Don't fail the callback if Firestore save fails
+        }
       }
+    } else if (status === "done") {
+      console.warn(`[Callback] Video marked as done but no videoUrl provided for jobId: ${jobId}`);
     }
 
     return NextResponse.json({ ok: true, message: "Job completed" });

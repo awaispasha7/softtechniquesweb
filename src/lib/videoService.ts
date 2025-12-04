@@ -47,12 +47,31 @@ export const saveGeneratedVideo = async (video: Omit<GeneratedVideo, 'id' | 'cre
 // Get all generated videos from Firebase
 export const getGeneratedVideos = async (): Promise<GeneratedVideo[]> => {
   try {
-    const q = query(collection(db, 'generated-videos'), orderBy('createdAt', 'desc'));
-    const querySnapshot = await getDocs(q);
+    console.log('[videoService] Fetching videos from Firestore...');
+    let querySnapshot;
+    
+    try {
+      // Try with orderBy first (requires index)
+      const q = query(collection(db, 'generated-videos'), orderBy('createdAt', 'desc'));
+      querySnapshot = await getDocs(q);
+    } catch (orderByError) {
+      // Fallback: query without orderBy if index doesn't exist
+      console.warn('[videoService] orderBy query failed, trying without orderBy:', orderByError);
+      querySnapshot = await getDocs(collection(db, 'generated-videos'));
+    }
+    
+    console.log(`[videoService] Found ${querySnapshot.size} documents in Firestore`);
     
     const videos: GeneratedVideo[] = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
+      console.log(`[videoService] Processing document ${doc.id}:`, {
+        hasVideoUrl: !!data.videoUrl,
+        status: data.status,
+        hasPrompt: !!data.prompt,
+        hasDuration: !!data.duration,
+      });
+      
       const video = {
         id: doc.id,
         ...data
@@ -71,6 +90,16 @@ export const getGeneratedVideos = async (): Promise<GeneratedVideo[]> => {
       videos.push(video);
     });
     
+    // Sort by createdAt if we didn't use orderBy
+    if (videos.length > 0 && videos[0].createdAt) {
+      videos.sort((a, b) => {
+        const aTime = a.createdAt?.toDate?.()?.getTime() || 0;
+        const bTime = b.createdAt?.toDate?.()?.getTime() || 0;
+        return bTime - aTime; // Descending order
+      });
+    }
+    
+    console.log(`[videoService] Returning ${videos.length} videos (${videos.filter(v => v.status === 'done').length} done)`);
     return videos;
   } catch (error: unknown) {
     // Check if it's a permission error
