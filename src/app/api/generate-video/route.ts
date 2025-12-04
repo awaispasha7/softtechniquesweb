@@ -2,9 +2,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { NextRequest, NextResponse } from "next/server";
 import { getAllJobIds } from "@/lib/videoJobs";
-import { hasCredits, useCredit } from "@/lib/creditService";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { hasCredits, useCredit } from "@/lib/creditServiceAdmin";
+import { adminDb } from "@/lib/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,9 +18,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Verify user exists in Firestore
-    const userDoc = await getDoc(doc(db, 'users', userId));
-    if (!userDoc.exists()) {
+    // Verify user exists in Firestore (using Admin SDK)
+    const userDoc = await adminDb.collection('users').doc(userId).get();
+    if (!userDoc.exists) {
       return NextResponse.json(
         { error: "User not found. Please sign in again." },
         { status: 401 }
