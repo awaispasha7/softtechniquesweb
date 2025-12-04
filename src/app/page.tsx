@@ -99,19 +99,15 @@ function HomeContent() {
               </p>
               
               <div className="flex flex-wrap gap-4">
-                <a
-                  href="#video-generation"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.getElementById('video-generation')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
+                <Link
+                  href="/generate-video"
                   className="group inline-flex items-center justify-center bg-white text-[#29473d] px-8 py-4 rounded-full font-bold text-base shadow-2xl hover:shadow-white/50 hover:bg-white/90 hover:scale-105 transition-all"
                 >
                   Generate Video Now
                   <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
             
