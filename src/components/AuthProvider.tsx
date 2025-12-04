@@ -40,8 +40,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       
       if (firebaseUser) {
         // Fetch user data from Firestore
-        const data = await getUserData(firebaseUser.uid);
-        setUserData(data);
+        try {
+          const data = await getUserData(firebaseUser.uid);
+          setUserData(data);
+        } catch (error) {
+          console.error('Error getting user data:', error);
+          // Set userData to null if there's an error (e.g., permissions issue)
+          // The user is still authenticated, but we can't fetch their Firestore data
+          setUserData(null);
+        }
       } else {
         setUserData(null);
       }
