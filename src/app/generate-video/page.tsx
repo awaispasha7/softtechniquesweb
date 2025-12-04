@@ -433,17 +433,7 @@ export default function GenerateVideoPage() {
           )}
 
           <section>
-            {!user ? (
-              <div className="bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 text-center">
-                <p className="text-sm sm:text-base text-white/80 mb-4">Please sign in to generate videos</p>
-                <Link
-                  href="/auth/login"
-                  className="inline-block px-6 py-3 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm sm:text-base font-semibold"
-                >
-                  Sign In
-                </Link>
-              </div>
-            ) : (
+            {user ? (
               <form
                 onSubmit={handleSubmit}
                 className="bg-white/10 border border-white/20 rounded-2xl p-4 sm:p-6 md:p-8 backdrop-blur"
@@ -506,7 +496,7 @@ export default function GenerateVideoPage() {
                 )}
               </div>
             </form>
-            )}
+            ) : null}
           </section>
 
           {status === "waiting" && (
