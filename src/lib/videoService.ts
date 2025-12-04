@@ -30,9 +30,10 @@ export const saveGeneratedVideo = async (video: Omit<GeneratedVideo, 'id' | 'cre
     });
     
     return docRef.id;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Check if it's a permission error
-    if (error?.code === 'permission-denied' || error?.message?.includes('permission')) {
+    const firebaseError = error as { code?: string; message?: string };
+    if (firebaseError?.code === 'permission-denied' || firebaseError?.message?.includes('permission')) {
       console.error('⚠️ Firebase Permission Error: Please update Firestore security rules in Firebase Console');
       console.error('Go to: Firebase Console → Firestore Database → Rules');
       console.error('Add this rule: allow read, write: if true; for generated-videos collection');
@@ -71,9 +72,10 @@ export const getGeneratedVideos = async (): Promise<GeneratedVideo[]> => {
     });
     
     return videos;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Check if it's a permission error
-    if (error?.code === 'permission-denied' || error?.message?.includes('permission')) {
+    const firebaseError = error as { code?: string; message?: string };
+    if (firebaseError?.code === 'permission-denied' || firebaseError?.message?.includes('permission')) {
       console.error('⚠️ Firebase Permission Error: Please update Firestore security rules in Firebase Console');
       console.error('Go to: Firebase Console → Firestore Database → Rules');
       console.error('Add this rule: allow read, write: if true; for generated-videos collection');

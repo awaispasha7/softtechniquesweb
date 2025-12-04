@@ -2,14 +2,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllJobIds } from "@/lib/videoJobs";
 
-type N8nStartResponse = {
-  jobId?: string;
-  id?: string;
-  workflowId?: string;
-  // Allow additional properties from n8n without using `any`
-  [key: string]: unknown;
-};
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
