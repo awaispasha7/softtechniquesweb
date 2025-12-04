@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAllJobIds } from "@/lib/videoJobs";
 import { hasCredits, useCredit } from "@/lib/creditServiceAdmin";
-import { adminDb } from "@/lib/firebaseAdmin";
+import { getAdminDb } from "@/lib/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify user exists in Firestore (using Admin SDK)
-    const userDoc = await adminDb.collection('users').doc(userId).get();
+    const userDoc = await getAdminDb().collection('users').doc(userId).get();
     if (!userDoc.exists) {
       return NextResponse.json(
         { error: "User not found. Please sign in again." },

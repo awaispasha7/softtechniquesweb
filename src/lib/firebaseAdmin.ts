@@ -2,11 +2,17 @@ import { initializeApp, getApps, cert, App } from 'firebase-admin/app';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
 
 let adminDbInstance: Firestore | null = null;
+let initializationError: Error | null = null;
 
-// Initialize Firebase Admin (only once)
+// Initialize Firebase Admin (only when actually used, not at module load)
 function initializeAdmin(): Firestore {
   if (adminDbInstance) {
     return adminDbInstance;
+  }
+
+  // If we already tried and failed, throw the cached error
+  if (initializationError) {
+    throw initializationError;
   }
 
   // Check if already initialized
@@ -24,29 +30,53 @@ function initializeAdmin(): Firestore {
       const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
 
       if (serviceAccountKey) {
-        // Parse JSON string from environment variable
-        const serviceAccount = JSON.parse(serviceAccountKey);
-        app = initializeApp({
-          credential: cert(serviceAccount),
-        });
+        // Validate and parse JSON string from environment variable
+        try {
+          const serviceAccount = JSON.parse(serviceAccountKey);
+          // Validate it has required fields
+          if (!serviceAccount.private_key || !serviceAccount.client_email) {
+            throw new Error('Invalid service account: missing required fields (private_key or client_email)');
+          }
+          app = initializeApp({
+            credential: cert(serviceAccount),
+          });
+        } catch (parseError) {
+          const error = new Error(
+            `Failed to parse FIREBASE_SERVICE_ACCOUNT_KEY: ${parseError instanceof Error ? parseError.message : 'Invalid JSON'}. ` +
+            'Make sure it\'s a valid JSON string containing the full service account key.'
+          );
+          initializationError = error;
+          throw error;
+        }
       } else if (serviceAccountPath) {
         // Use file path (for local development)
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const serviceAccount = require(serviceAccountPath);
-        app = initializeApp({
-          credential: cert(serviceAccount),
-        });
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-require-imports
+          const serviceAccount = require(serviceAccountPath);
+          app = initializeApp({
+            credential: cert(serviceAccount),
+          });
+        } catch (requireError) {
+          const error = new Error(
+            `Failed to load service account from ${serviceAccountPath}: ${requireError instanceof Error ? requireError.message : 'Unknown error'}`
+          );
+          initializationError = error;
+          throw error;
+        }
       } else {
-        // Fallback: Try to use default credentials (for production environments like Vercel)
-        // This works if FIREBASE_SERVICE_ACCOUNT_KEY is set as a JSON string
-        throw new Error(
+        // No credentials found - only throw when actually trying to use it
+        const error = new Error(
           'Firebase Admin credentials not found. ' +
-          'Set FIREBASE_SERVICE_ACCOUNT_KEY (JSON string) or FIREBASE_SERVICE_ACCOUNT_PATH (file path) in environment variables.'
+          'Set FIREBASE_SERVICE_ACCOUNT_KEY (JSON string) or FIREBASE_SERVICE_ACCOUNT_PATH (file path) in environment variables. ' +
+          'This is only needed for API routes that use Firebase Admin SDK.'
         );
+        initializationError = error;
+        throw error;
       }
     } catch (error) {
+      initializationError = error instanceof Error ? error : new Error(String(error));
       console.error('Error initializing Firebase Admin:', error);
-      throw error;
+      throw initializationError;
     }
   }
 
@@ -54,6 +84,10 @@ function initializeAdmin(): Firestore {
   return adminDbInstance;
 }
 
-// Export Admin Firestore instance (lazy initialization)
-export const adminDb = initializeAdmin();
+// Export function to get Admin Firestore instance (lazy initialization)
+// This prevents build-time errors if credentials aren't set
+// Only initializes when actually called, not at module load
+export function getAdminDb(): Firestore {
+  return initializeAdmin();
+}
 

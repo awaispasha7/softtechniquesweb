@@ -34,6 +34,10 @@ yarn-error.log*
 serviceAccountKey.json
 firebase-adminsdk-*.json
 
+# Lock files (keep only pnpm-lock.yaml if using pnpm)
+package-lock.json
+yarn.lock
+
 
 # vercel
 .vercel

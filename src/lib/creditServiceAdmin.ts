@@ -5,7 +5,7 @@
  * DO NOT use this in client-side code - use creditService.ts instead
  */
 
-import { adminDb } from './firebaseAdmin';
+import { getAdminDb } from './firebaseAdmin';
 import { FieldValue } from 'firebase-admin/firestore';
 
 export interface UserCredits {
@@ -23,7 +23,7 @@ const getAdminEmails = (): string[] => {
 // Get user credits (using Admin SDK - bypasses security rules)
 export const getUserCredits = async (userId: string): Promise<UserCredits> => {
   try {
-    const userDoc = await adminDb.collection('users').doc(userId).get();
+    const userDoc = await getAdminDb().collection('users').doc(userId).get();
     
     if (!userDoc.exists) {
       return { credits: 0 };
@@ -75,7 +75,7 @@ export const useCredit = async (userId: string): Promise<boolean> => {
     }
     
     // Decrement credits using Admin SDK
-    await adminDb.collection('users').doc(userId).update({
+    await getAdminDb().collection('users').doc(userId).update({
       credits: FieldValue.increment(-1),
     });
     
