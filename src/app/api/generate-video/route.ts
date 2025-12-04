@@ -1,4 +1,5 @@
 // softtechniquesweb/src/app/api/generate-video/route.ts
+/* eslint-disable react-hooks/rules-of-hooks */
 import { NextRequest, NextResponse } from "next/server";
 import { getAllJobIds } from "@/lib/videoJobs";
 import { hasCredits, useCredit } from "@/lib/creditService";

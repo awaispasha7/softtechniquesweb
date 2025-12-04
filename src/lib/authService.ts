@@ -5,6 +5,8 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   UserCredential,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { auth, db } from './firebase';
@@ -102,6 +104,51 @@ export const resetPassword = async (email: string): Promise<void> => {
   }
 };
 
+// Sign in with Google
+export const signInWithGoogle = async (): Promise<UserCredential> => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const userCredential = await signInWithPopup(auth, provider);
+    
+    // Check if user document exists in Firestore
+    const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+    
+    if (!userDoc.exists()) {
+      // First time Google sign-in - create user document
+      const email = userCredential.user.email || '';
+      const displayName = userCredential.user.displayName || userCredential.user.email?.split('@')[0] || 'User';
+      
+      const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
+      const isUnlimited = ADMIN_EMAILS.includes(email);
+      
+      const userData: Omit<UserData, 'uid'> = {
+        email,
+        displayName,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        credits: 3, // Initial credits for new users
+        isUnlimited: isUnlimited, // Set unlimited for admin emails
+      };
+      
+      await setDoc(doc(db, 'users', userCredential.user.uid), userData);
+      console.log('✅ New Google user created in Firestore:', userCredential.user.uid);
+    } else {
+      // Update last login time for existing user
+      await setDoc(
+        doc(db, 'users', userCredential.user.uid),
+        { updatedAt: serverTimestamp() },
+        { merge: true }
+      );
+    }
+    
+    return userCredential;
+  } catch (error: unknown) {
+    const firebaseError = error as { code?: string; message?: string };
+    console.error('Error signing in with Google:', firebaseError);
+    throw error;
+  }
+};
+
 // Get user data from Firestore
 export const getUserData = async (uid: string): Promise<UserData | null> => {
   try {
@@ -146,6 +193,12 @@ export const getAuthErrorMessage = (error: unknown): string => {
       return 'Too many failed attempts. Please try again later.';
     case 'auth/network-request-failed':
       return 'Network error. Please check your connection and try again.';
+    case 'auth/popup-closed-by-user':
+      return 'Sign-in popup was closed. Please try again.';
+    case 'auth/cancelled-popup-request':
+      return 'Only one popup request is allowed at a time. Please try again.';
+    case 'auth/popup-blocked':
+      return 'Popup was blocked by your browser. Please allow popups and try again.';
     default:
       return firebaseError.message || 'An error occurred. Please try again.';
   }
