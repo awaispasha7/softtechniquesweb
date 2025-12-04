@@ -155,8 +155,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ jobId: registeredJobId });
   } catch (err) {
     console.error("Error in /api/generate-video:", err);
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    const errorStack = err instanceof Error ? err.stack : undefined;
+    console.error("Error details:", { errorMessage, errorStack });
     return NextResponse.json(
-      { error: "Unexpected server error." },
+      { 
+        error: "Unexpected server error.",
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      },
       { status: 500 }
     );
   }
