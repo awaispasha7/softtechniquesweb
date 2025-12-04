@@ -46,20 +46,20 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-[#29473d] flex flex-col">
       <Navbar />
       
-      <main className="flex-1 flex items-center justify-center px-4 py-20 relative">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20 relative">
         {/* Background floating elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500 rounded-full filter blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500 rounded-full filter blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-56 sm:w-80 h-56 sm:h-80 bg-blue-500 rounded-full filter blur-3xl"></div>
         </div>
 
         <div className="w-full max-w-md relative z-10">
-          <div className="bg-[#29473d] backdrop-blur-sm rounded-3xl border border-white/20 p-8 shadow-2xl shadow-white/20">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-white mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <div className="bg-[#29473d] backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/20 p-6 sm:p-8 shadow-2xl shadow-white/20">
+            <div className="text-center mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
                 Create Account
               </h1>
-              <p className="text-white/80">Sign up to start creating blog posts</p>
+              <p className="text-sm sm:text-base text-white/80">Sign up to start creating blog posts</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">

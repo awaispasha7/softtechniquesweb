@@ -1445,11 +1445,11 @@ export default function BlogPage(): React.JSX.Element {
           
           {/* Auth Status */}
           {!authLoading && (
-            <div className="flex items-center justify-center gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 px-4">
               {user ? (
-                <div className="flex items-center gap-4">
-                  <div className="text-white/80">
-                    Signed in as <span className="font-semibold text-white">{userData?.displayName || user.email}</span>
+                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                  <div className="text-sm sm:text-base text-white/80 text-center sm:text-left">
+                    Signed in as <span className="font-semibold text-white break-words">{userData?.displayName || user.email}</span>
                   </div>
                   <button
                     onClick={async () => {
@@ -1460,26 +1460,28 @@ export default function BlogPage(): React.JSX.Element {
                         console.error('Error signing out:', error);
                       }
                     }}
-                    className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all text-sm"
+                    className="w-full sm:w-auto px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all text-sm min-h-[44px] touch-manipulation"
                   >
                     Sign Out
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-4">
-                  <span className="text-white/60">Sign in to create and manage posts</span>
-                  <Link
-                    href="/auth/login"
-                    className="px-4 py-2 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/auth/signup"
-                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg transition-all text-sm font-semibold"
-                  >
-                    Sign Up
-                  </Link>
+                <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                  <span className="text-sm sm:text-base text-white/60 text-center sm:text-left">Sign in to create and manage posts</span>
+                  <div className="flex gap-3 w-full sm:w-auto">
+                    <Link
+                      href="/auth/login"
+                      className="flex-1 sm:flex-none px-4 py-2.5 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold text-center min-h-[44px] touch-manipulation"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      className="flex-1 sm:flex-none px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg transition-all text-sm font-semibold text-center min-h-[44px] touch-manipulation"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
                 </div>
               )}
             </div>

@@ -1,13 +1,19 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getGeneratedVideos, GeneratedVideo } from "@/lib/videoService";
+import { useAuth } from "@/components/AuthProvider";
+import { getUserCredits } from "@/lib/creditService";
 
 type Status = "idle" | "starting" | "waiting" | "done" | "error";
 
 export default function GenerateVideoPage() {
+  const router = useRouter();
+  const { user, userData, loading: authLoading } = useAuth();
   const [prompt, setPrompt] = useState("");
   const [duration, setDuration] = useState("10");
   const [status, setStatus] = useState<Status>("idle");
@@ -20,6 +26,21 @@ export default function GenerateVideoPage() {
   const [exampleVideos, setExampleVideos] = useState<GeneratedVideo[]>([]);
   const [loadingExamples, setLoadingExamples] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<GeneratedVideo | null>(null);
+  const [credits, setCredits] = useState<number | null>(null);
+  const [isUnlimited, setIsUnlimited] = useState(false);
+
+  // Load user credits
+  useEffect(() => {
+    if (user?.uid) {
+      getUserCredits(user.uid).then((userCredits) => {
+        setCredits(userCredits.credits);
+        setIsUnlimited(userCredits.isUnlimited || false);
+      });
+    } else {
+      setCredits(null);
+      setIsUnlimited(false);
+    }
+  }, [user]);
 
   // Rotating loading messages
   useEffect(() => {
@@ -197,6 +218,12 @@ export default function GenerateVideoPage() {
     setErrorMessage(null);
     setVideoUrl(null);
 
+    // Check authentication
+    if (!user || !user.uid) {
+      router.push('/auth/login');
+      return;
+    }
+
     if (!prompt.trim()) {
       setErrorMessage("Please enter a prompt.");
       return;
@@ -214,7 +241,7 @@ export default function GenerateVideoPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ prompt, duration }),
+        body: JSON.stringify({ prompt, duration, userId: user.uid }),
         signal: controller.signal,
       });
 
@@ -227,6 +254,23 @@ export default function GenerateVideoPage() {
           .catch(() => ({} as ApiErrorResponse));
         const errorMsg = data.error || "Failed to start video generation.";
         const details = data.details ? ` ${data.details}` : "";
+        
+        // Handle authentication/authorization errors
+        if (res.status === 401) {
+          router.push('/auth/login');
+          return;
+        }
+        
+        if (res.status === 403) {
+          // Refresh credits display
+          if (user?.uid) {
+            getUserCredits(user.uid).then((userCredits) => {
+              setCredits(userCredits.credits);
+              setIsUnlimited(userCredits.isUnlimited || false);
+            });
+          }
+        }
+        
         throw new Error(errorMsg + details);
       }
 
@@ -244,6 +288,14 @@ export default function GenerateVideoPage() {
       console.log("[Frontend] Setting jobId state to:", data.jobId);
       setJobId(data.jobId);
       setStatus("waiting");
+      
+      // Refresh credits after using one
+      if (user?.uid) {
+        getUserCredits(user.uid).then((userCredits) => {
+          setCredits(userCredits.credits);
+          setIsUnlimited(userCredits.isUnlimited || false);
+        });
+      }
       
       // Immediately check status in case job already completed
       setTimeout(() => {
@@ -343,11 +395,59 @@ export default function GenerateVideoPage() {
             </div>
           </header>
 
+          {/* Authentication and Credits Status */}
+          {!authLoading && (
+            <div className="bg-white/10 border border-white/20 rounded-xl p-4 sm:p-6">
+              {user ? (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                    <div className="text-sm sm:text-base text-white/80">
+                      Signed in as <span className="font-semibold text-white break-words">{userData?.displayName || user.email}</span>
+                    </div>
+                    {credits !== null && (
+                      <div className="flex items-center gap-2">
+                        <span className="text-white/60 text-xs sm:text-sm">Credits:</span>
+                        {isUnlimited ? (
+                          <span className="font-bold text-white text-sm sm:text-base">Unlimited</span>
+                        ) : (
+                          <span className={`font-bold text-sm sm:text-base ${credits > 0 ? 'text-white' : 'text-red-300'}`}>
+                            {credits}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+                  <p className="text-sm sm:text-base text-white/80">Sign in to generate videos</p>
+                  <Link
+                    href="/auth/login"
+                    className="px-4 py-2.5 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold text-center"
+                  >
+                    Sign In
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
           <section>
-            <form
-              onSubmit={handleSubmit}
-              className="bg-white/10 border border-white/20 rounded-2xl p-6 md:p-8 backdrop-blur"
-            >
+            {!user ? (
+              <div className="bg-white/10 border border-white/20 rounded-2xl p-6 sm:p-8 text-center">
+                <p className="text-sm sm:text-base text-white/80 mb-4">Please sign in to generate videos</p>
+                <Link
+                  href="/auth/login"
+                  className="inline-block px-6 py-3 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm sm:text-base font-semibold"
+                >
+                  Sign In
+                </Link>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleSubmit}
+                className="bg-white/10 border border-white/20 rounded-2xl p-4 sm:p-6 md:p-8 backdrop-blur"
+              >
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold mb-2">
@@ -362,13 +462,13 @@ export default function GenerateVideoPage() {
                   />
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
                   <div className="flex-1">
                     <label className="block text-sm font-semibold mb-2">
                       Duration (seconds)
                     </label>
                     <select
-                      className="w-full md:w-48 rounded-full bg-white/5 border border-white/20 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/70"
+                      className="w-full sm:w-48 rounded-full bg-white/5 border border-white/20 px-4 py-3 sm:py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/70"
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
                       disabled={isBusy}
@@ -380,16 +480,24 @@ export default function GenerateVideoPage() {
 
                   <button
                     type="submit"
-                    disabled={isBusy}
-                    className="mt-2 md:mt-7 inline-flex items-center justify-center bg-white text-[#29473d] px-8 py-3 rounded-full font-bold text-base shadow-xl hover:shadow-2xl hover:bg-white/90 hover:scale-105 transition-all disabled:opacity-60 disabled:hover:scale-100"
+                    disabled={isBusy || (credits !== null && credits <= 0 && !isUnlimited)}
+                    className="w-full sm:w-auto mt-0 sm:mt-0 inline-flex items-center justify-center bg-white text-[#29473d] px-6 sm:px-8 py-3 rounded-full font-bold text-sm sm:text-base shadow-xl hover:shadow-2xl hover:bg-white/90 hover:scale-105 transition-all disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed min-h-[44px]"
                   >
                     {status === "starting"
                       ? "Starting..."
                       : status === "waiting"
                       ? "Generating..."
+                      : credits !== null && credits <= 0 && !isUnlimited
+                      ? "No Credits"
                       : "Generate Video"}
                   </button>
                 </div>
+
+                {credits !== null && credits <= 0 && !isUnlimited && (
+                  <div className="rounded-xl bg-yellow-500/20 border border-yellow-400/60 text-sm px-4 py-3">
+                    You have no credits remaining. Please contact support to add more credits.
+                  </div>
+                )}
 
                 {errorMessage && (
                   <div className="rounded-xl bg-red-500/20 border border-red-400/60 text-sm px-4 py-3">
@@ -398,6 +506,7 @@ export default function GenerateVideoPage() {
                 )}
               </div>
             </form>
+            )}
           </section>
 
           {status === "waiting" && (

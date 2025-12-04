@@ -15,6 +15,8 @@ export interface UserData {
   displayName: string;
   createdAt: Timestamp | ReturnType<typeof serverTimestamp>;
   updatedAt: Timestamp | ReturnType<typeof serverTimestamp>;
+  credits?: number; // Video generation credits
+  isUnlimited?: boolean; // Admin accounts with unlimited credits
 }
 
 // Sign up a new user
@@ -33,11 +35,16 @@ export const signUp = async (
     }
     
     // Create user document in Firestore
+    const ADMIN_EMAILS = process.env.ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
+    const isUnlimited = ADMIN_EMAILS.includes(email);
+    
     const userData: Omit<UserData, 'uid'> = {
       email,
       displayName,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
+      credits: 3, // Initial credits for new users
+      isUnlimited: isUnlimited, // Set unlimited for admin emails
     };
     
     await setDoc(doc(db, 'users', userCredential.user.uid), userData);

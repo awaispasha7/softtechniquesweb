@@ -1,11 +1,40 @@
 // softtechniquesweb/src/app/api/generate-video/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { getAllJobIds } from "@/lib/videoJobs";
+import { hasCredits, useCredit } from "@/lib/creditService";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { prompt, duration } = body ?? {};
+    const { prompt, duration, userId } = body ?? {};
+
+    // Check authentication
+    if (!userId || typeof userId !== "string") {
+      return NextResponse.json(
+        { error: "Authentication required. Please sign in to generate videos." },
+        { status: 401 }
+      );
+    }
+
+    // Verify user exists in Firestore
+    const userDoc = await getDoc(doc(db, 'users', userId));
+    if (!userDoc.exists()) {
+      return NextResponse.json(
+        { error: "User not found. Please sign in again." },
+        { status: 401 }
+      );
+    }
+
+    // Check if user has credits
+    const hasCredit = await hasCredits(userId);
+    if (!hasCredit) {
+      return NextResponse.json(
+        { error: "You have no video generation credits remaining. Please contact support to add more credits." },
+        { status: 403 }
+      );
+    }
 
     if (!prompt || typeof prompt !== "string") {
       return NextResponse.json(
@@ -18,6 +47,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Duration is required." },
         { status: 400 }
+      );
+    }
+
+    // Use a credit before starting generation
+    const creditUsed = await useCredit(userId);
+    if (!creditUsed) {
+      return NextResponse.json(
+        { error: "Failed to use credit. Please try again." },
+        { status: 500 }
       );
     }
 

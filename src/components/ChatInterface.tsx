@@ -182,10 +182,11 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
       <div 
         className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 transition-opacity duration-300"
         onClick={onClose}
+        style={{ width: '100vw', maxWidth: '100%', left: 0, right: 0 }}
       />
       
       {/* Chat Interface */}
-      <div className="fixed top-16 sm:top-20 left-2 right-2 sm:left-auto sm:right-4 md:right-8 bottom-4 sm:bottom-16 z-[100] w-auto sm:w-96 md:w-[28rem] max-h-[calc(100vh-5rem)] sm:max-h-[calc(100vh-9rem)] flex flex-col animate-in slide-in-from-right-5 duration-300">
+      <div className="fixed top-16 sm:top-20 left-2 right-2 sm:left-auto sm:right-4 md:right-8 bottom-4 sm:bottom-16 z-[100] w-[calc(100%-1rem)] sm:w-96 md:w-[28rem] max-h-[calc(100vh-5rem)] sm:max-h-[calc(100vh-9rem)] flex flex-col animate-in slide-in-from-right-5 duration-300 max-w-full">
         {/* Chat Window */}
         <div className="relative bg-[#3a5a4f] rounded-lg shadow-xl w-full h-full flex flex-col border border-[#4a6b5f]">
           {/* Header */}
