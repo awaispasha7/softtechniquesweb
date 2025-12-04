@@ -50,53 +50,53 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-[9999] bg-[#29473d] backdrop-blur-sm border-b-2 border-white/20">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-18 lg:h-20 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 lg:h-20 w-full">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" onClick={closeMenu}>
-              <div className="w-[200px] h-[200px] rounded-full flex items-center justify-center -mt-2 -ml-4">
+              <div className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[200px] lg:h-[200px] rounded-full flex items-center justify-center -mt-2 -ml-2 sm:-ml-3 lg:-ml-4">
                 <Image
                   src="/logo8.png"
                   alt="SoftTechniques Logo"
                   width={1000}
                   height={1000}
-                  className="w-[200px] h-[200px] object-contain"
+                  className="w-full h-full object-contain"
                   priority
                 />
               </div>
             </Link>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center gap-6 flex-1 justify-center">
+          {/* Desktop Navigation Links - Show on large tablets and up */}
+          <div className="hidden lg:flex items-center gap-4 xl:gap-6 flex-1 justify-center">
             <Link
               href="#services"
-              className="text-white/90 hover:text-white transition-colors text-xs font-medium"
+              className="text-white/90 hover:text-white transition-colors text-sm xl:text-base font-medium whitespace-nowrap"
             >
               Services
             </Link>
             <Link
               href="#about"
-              className="text-white/90 hover:text-white transition-colors text-xs font-medium"
+              className="text-white/90 hover:text-white transition-colors text-sm xl:text-base font-medium whitespace-nowrap"
             >
               About
             </Link>
             <Link
               href="#why-us"
-              className="text-white/90 hover:text-white transition-colors text-xs font-medium"
+              className="text-white/90 hover:text-white transition-colors text-sm xl:text-base font-medium whitespace-nowrap"
             >
               Why Us
             </Link>
             <Link
               href="#case-studies"
-              className="text-white/90 hover:text-white transition-colors text-xs font-medium"
+              className="text-white/90 hover:text-white transition-colors text-sm xl:text-base font-medium whitespace-nowrap"
             >
               Case Studies
             </Link>
             <button
               onClick={handleContactClick}
-              className="text-white/90 hover:text-white transition-colors text-xs font-medium"
+              className="text-white/90 hover:text-white transition-colors text-sm xl:text-base font-medium whitespace-nowrap"
             >
               Contact
             </button>
@@ -106,10 +106,10 @@ export default function Navbar() {
               <button
                 onMouseEnter={handleDropdownMouseEnter}
                 onMouseLeave={handleDropdownMouseLeave}
-                className="text-white/90 hover:text-white transition-colors text-xs font-medium flex items-center"
+                className="text-white/90 hover:text-white transition-colors text-sm xl:text-base font-medium flex items-center whitespace-nowrap"
               >
                 Resources
-                <svg className="ml-1 h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="ml-1 h-3 w-3 xl:h-4 xl:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
@@ -123,7 +123,7 @@ export default function Navbar() {
                 >
                   <Link
                     href="/blog"
-                    className="block px-4 py-2 text-xs text-white hover:bg-white/20 transition-colors duration-200 text-center"
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors duration-200 text-center"
                     onClick={() => setIsResourcesDropdownOpen(false)}
                   >
                     Blog
@@ -133,20 +133,20 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Desktop CTA Button */}
-          <div className="hidden md:flex items-center flex-shrink-0">
+          {/* Desktop CTA Button - Show on large tablets and up */}
+          <div className="hidden lg:flex items-center flex-shrink-0">
             <Link
               href="#about"
-              className="bg-white text-[#29473d] px-4 py-1.5 rounded-full font-medium text-xs hover:bg-white/90 transition-colors"
+              className="bg-white text-[#29473d] px-4 xl:px-6 py-1.5 xl:py-2 rounded-full font-medium text-sm xl:text-base hover:bg-white/90 transition-colors whitespace-nowrap"
             >
               Get Started
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile/Tablet Menu Button - Show on mobile and tablets */}
           <button
             onClick={toggleMenu}
-            className="block sm:block md:hidden lg:hidden xl:hidden 2xl:hidden flex flex-col items-center justify-center w-10 h-10 space-y-1 bg-white/20 rounded-lg hover:bg-white/30 transition-colors border border-white/30"
+            className="block lg:hidden flex flex-col items-center justify-center w-10 h-10 space-y-1 bg-white/20 rounded-lg hover:bg-white/30 transition-colors border border-white/30"
             aria-label="Toggle menu"
           >
             <span
@@ -167,9 +167,9 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile/Tablet Menu */}
         <div
-          className={`md:hidden transition-all duration-300 ease-in-out bg-[#29473d] ${
+          className={`lg:hidden transition-all duration-300 ease-in-out bg-[#29473d] ${
             isMenuOpen
               ? "max-h-96 opacity-100 pb-4"
               : "max-h-0 opacity-0 overflow-hidden"
