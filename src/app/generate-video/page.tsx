@@ -331,7 +331,7 @@ export default function GenerateVideoPage() {
                   } catch (error) {
                     console.error('[Frontend] Error loading example videos:', error);
                     // Show error to user
-                    setErrorMessage('Failed to load example videos. Please check console for details.');
+                    // setErrorMessage('Failed to load example videos. Please check console for details.');
                   } finally {
                     setLoadingExamples(false);
                   }

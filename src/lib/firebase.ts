@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
 // Your web app's Firebase configuration
@@ -23,6 +24,9 @@ export const db = getFirestore(app);
 
 // Initialize Firebase Storage
 export const storage = getStorage(app);
+
+// Initialize Firebase Auth
+export const auth = getAuth(app);
 
 // Initialize Analytics only on client side
 let analytics: ReturnType<typeof getAnalytics> | null = null;

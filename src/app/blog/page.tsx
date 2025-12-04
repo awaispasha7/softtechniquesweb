@@ -1,14 +1,20 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 // Timestamp removed - not used
 import Navbar from '../../components/Navbar';
 import ChatProvider from '../../components/ChatProvider';
 import { getBlogPosts, saveBlogPost, deleteBlogPost, updateBlogPost, uploadBlogImages, BlogPost } from '../../lib/blogService';
 import { parseDocument } from '../../lib/fileParser';
 import { uploadDocumentToCloudinary } from '../../lib/cloudinary';
+import { useAuth } from '@/components/AuthProvider';
+import { signOutUser } from '@/lib/authService';
 
 export default function BlogPage(): React.JSX.Element {
+  const router = useRouter();
+  const { user, userData, loading: authLoading } = useAuth();
   const [isVisible, setIsVisible] = useState(false);
   const [animatedElements, setAnimatedElements] = useState<number[]>([]);
   const [isWritingMode, setIsWritingMode] = useState(false);
@@ -17,7 +23,7 @@ export default function BlogPage(): React.JSX.Element {
     title: '',
     content: '',
     excerpt: '',
-    author: 'SoftTechniques Team',
+    author: userData?.displayName || 'SoftTechniques Team',
     tags: [] as string[],
   });
   const [tagInput, setTagInput] = useState('');
@@ -35,6 +41,13 @@ export default function BlogPage(): React.JSX.Element {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const documentInputRef = useRef<HTMLInputElement>(null);
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Update author when user data loads
+  useEffect(() => {
+    if (userData?.displayName) {
+      setNewPost(prev => ({ ...prev, author: userData.displayName }));
+    }
+  }, [userData]);
 
   useEffect(() => {
     // Load blog posts from Firebase
@@ -90,6 +103,12 @@ export default function BlogPage(): React.JSX.Element {
   };
 
   const handlePublishPost = async () => {
+    // Check authentication
+    if (!user || !user.uid) {
+      router.push('/auth/login');
+      return;
+    }
+
     if (newPost.title && newPost.content) {
       if (isEditing && editingPost) {
         await handleUpdatePost();
@@ -106,8 +125,8 @@ export default function BlogPage(): React.JSX.Element {
             readTime: Math.ceil(newPost.content.split(' ').length / 200) + ' min read'
           };
 
-          // Save to Firebase first to get post ID
-          const postId = await saveBlogPost(postData);
+          // Save to Firebase first to get post ID (requires userId)
+          const postId = await saveBlogPost(postData, user.uid, userData?.displayName);
           console.log('✅ Blog post saved successfully');
           
           // Upload images if any (don't block publishing if this fails)
@@ -118,8 +137,8 @@ export default function BlogPage(): React.JSX.Element {
               .then((imageUrls) => {
                 console.log('✅ Images uploaded successfully:', imageUrls);
                 if (imageUrls && imageUrls.length > 0) {
-                  // Update the post with image URLs if upload succeeds
-                  return updateBlogPost(postId, { images: imageUrls });
+                  // Update the post with image URLs if upload succeeds (requires userId)
+                  return updateBlogPost(postId, { images: imageUrls }, user.uid);
                 } else {
                   throw new Error('No image URLs returned');
                 }
@@ -208,6 +227,12 @@ export default function BlogPage(): React.JSX.Element {
   };
 
   const handleUpdatePost = async () => {
+    // Check authentication
+    if (!user || !user.uid) {
+      router.push('/auth/login');
+      return;
+    }
+
     if (editingPost && newPost.title && newPost.content) {
       setSavingPost(true);
       try {
@@ -220,7 +245,7 @@ export default function BlogPage(): React.JSX.Element {
           readTime: Math.ceil(newPost.content.split(' ').length / 200) + ' min read'
         };
 
-        await updateBlogPost(editingPost.id, updatedData);
+        await updateBlogPost(editingPost.id, updatedData, user.uid);
         console.log('✅ Blog post updated successfully');
         
         // Handle images: keep existing ones that are still in previews, add new ones
@@ -228,7 +253,7 @@ export default function BlogPage(): React.JSX.Element {
         let finalImageUrls = existingImageUrls;
         
         // Update with existing images first (in case some were removed)
-        await updateBlogPost(editingPost.id, { images: finalImageUrls });
+        await updateBlogPost(editingPost.id, { images: finalImageUrls }, user.uid);
         
         // Upload new images if any (don't block update if this fails)
         if (selectedImages.length > 0) {
@@ -237,7 +262,7 @@ export default function BlogPage(): React.JSX.Element {
           uploadBlogImages(selectedImages, editingPost.id)
             .then((newImageUrls) => {
               finalImageUrls = [...existingImageUrls, ...newImageUrls];
-              return updateBlogPost(editingPost.id, { images: finalImageUrls });
+              return updateBlogPost(editingPost.id, { images: finalImageUrls }, user.uid);
             })
             .then(() => {
               // Reload posts to show updated post with images
@@ -280,9 +305,15 @@ export default function BlogPage(): React.JSX.Element {
   };
 
   const handleDeletePost = async (postId: string) => {
+    // Check authentication
+    if (!user || !user.uid) {
+      router.push('/auth/login');
+      return;
+    }
+
     if (window.confirm('Are you sure you want to delete this blog post? This action cannot be undone.')) {
       try {
-        await deleteBlogPost(postId);
+        await deleteBlogPost(postId, user.uid);
         console.log('✅ Blog post deleted successfully');
         // Clear form state when deleting
         setNewPost({
@@ -1412,8 +1443,51 @@ export default function BlogPage(): React.JSX.Element {
             Stay updated with the latest trends, insights, and innovations in software development and technology.
           </p>
           
-          {/* Write New Post or Upload Document Buttons */}
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+          {/* Auth Status */}
+          {!authLoading && (
+            <div className="flex items-center justify-center gap-4 mb-8">
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <div className="text-white/80">
+                    Signed in as <span className="font-semibold text-white">{userData?.displayName || user.email}</span>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      try {
+                        await signOutUser();
+                        router.push('/blog');
+                      } catch (error) {
+                        console.error('Error signing out:', error);
+                      }
+                    }}
+                    className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all text-sm"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  <span className="text-white/60">Sign in to create and manage posts</span>
+                  <Link
+                    href="/auth/login"
+                    className="px-4 py-2 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/auth/signup"
+                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg transition-all text-sm font-semibold"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Write New Post or Upload Document Buttons - Only show if authenticated */}
+          {user && (
+            <div className="flex items-center justify-center gap-4 flex-wrap">
           <button
               onClick={() => {
                 if (!isWritingMode) {
@@ -1478,7 +1552,8 @@ export default function BlogPage(): React.JSX.Element {
               </span>
               <div className="absolute inset-0 -top-2 -left-2 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
           </button>
-          </div>
+            </div>
+          )}
           
           {/* Hidden document input */}
           <input
@@ -1957,34 +2032,36 @@ export default function BlogPage(): React.JSX.Element {
                       <p className="text-white/60 text-xs">{post.readTime}</p>
                     </div>
                     
-                    {/* Edit and Delete Buttons */}
-                    <div className="flex gap-1">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditPost(post);
-                        }}
-                        className="w-7 h-7 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white hover:text-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-white/25 border border-white/30"
-                        title="Edit this post"
-                      >
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                      </button>
-                      
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeletePost(post.id);
-                        }}
-                        className="w-7 h-7 bg-red-500/20 hover:bg-red-500/30 backdrop-blur-sm text-red-300 hover:text-red-200 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-red-500/25 border border-red-500/30"
-                        title="Delete this post"
-                      >
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
+                    {/* Edit and Delete Buttons - Only show if user owns the post */}
+                    {user && post.userId === user.uid && (
+                      <div className="flex gap-1">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditPost(post);
+                          }}
+                          className="w-7 h-7 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white hover:text-white rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-white/25 border border-white/30"
+                          title="Edit this post"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
+                        </button>
+                        
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeletePost(post.id);
+                          }}
+                          className="w-7 h-7 bg-red-500/20 hover:bg-red-500/30 backdrop-blur-sm text-red-300 hover:text-red-200 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-red-500/25 border border-red-500/30"
+                          title="Delete this post"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
