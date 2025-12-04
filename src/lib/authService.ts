@@ -4,18 +4,17 @@ import {
   signOut,
   sendPasswordResetEmail,
   updateProfile,
-  User,
   UserCredential,
 } from 'firebase/auth';
-import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
 export interface UserData {
   uid: string;
   email: string;
   displayName: string;
-  createdAt: any;
-  updatedAt: any;
+  createdAt: Timestamp | ReturnType<typeof serverTimestamp>;
+  updatedAt: Timestamp | ReturnType<typeof serverTimestamp>;
 }
 
 // Sign up a new user
