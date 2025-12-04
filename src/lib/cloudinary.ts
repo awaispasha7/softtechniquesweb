@@ -135,3 +135,155 @@ export const uploadDocumentToCloudinary = async (file: File, folder: string = 'b
   return data.secure_url;
 };
 
+// Helper function to upload and compress video to Cloudinary
+export const uploadVideoToCloudinary = async (
+  videoUrl: string, 
+  folder: string = 'generated-videos',
+  options: {
+    quality?: 'auto' | 'best' | 'good' | 'eco' | 'low';
+    bitRate?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+    format?: 'mp4' | 'webm' | 'auto';
+  } = {}
+): Promise<string> => {
+  try {
+    // Fetch the video from the URL
+    const videoResponse = await fetch(videoUrl);
+    if (!videoResponse.ok) {
+      throw new Error(`Failed to fetch video from URL: ${videoUrl}`);
+    }
+    
+    const videoBlob = await videoResponse.blob();
+    const videoFile = new File([videoBlob], 'video.mp4', { type: 'video/mp4' });
+    
+    const formData = new FormData();
+    formData.append('file', videoFile);
+    formData.append('upload_preset', CLOUDINARY_CONFIG.upload_preset);
+    formData.append('folder', folder);
+    formData.append('resource_type', 'video');
+    
+    // Compression and optimization settings
+    const transformations: string[] = [];
+    
+    // Quality setting (default: 'auto' for best compression)
+    if (options.quality) {
+      transformations.push(`q_${options.quality}`);
+    } else {
+      transformations.push('q_auto'); // Auto quality for best compression
+    }
+    
+    // Bit rate for video compression (lower = smaller file)
+    if (options.bitRate) {
+      transformations.push(`br_${options.bitRate}`);
+    } else {
+      // Default bit rate for good compression (adjust based on needs)
+      transformations.push('br_1m'); // 1 Mbps for good compression
+    }
+    
+    // Max dimensions (optional, helps reduce size)
+    if (options.maxWidth) {
+      transformations.push(`w_${options.maxWidth}`);
+    }
+    if (options.maxHeight) {
+      transformations.push(`h_${options.maxHeight}`);
+    }
+    
+    // Format (default: auto for best compression)
+    if (options.format) {
+      transformations.push(`f_${options.format}`);
+    } else {
+      transformations.push('f_auto'); // Auto format (usually webm for better compression)
+    }
+    
+    // Additional compression settings
+    transformations.push('vc_h264'); // H.264 codec for compatibility
+    transformations.push('ac_aac'); // AAC audio codec
+    
+    if (transformations.length > 0) {
+      formData.append('eager', transformations.join(','));
+    }
+    
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloud_name}/video/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error?.message || 'Failed to upload and compress video');
+    }
+
+    const data = await response.json();
+    
+    // Return the eager transformation URL if available (compressed version)
+    // Otherwise return the original secure_url
+    if (data.eager && data.eager.length > 0) {
+      return data.eager[0].secure_url;
+    }
+    
+    return data.secure_url;
+  } catch (error) {
+    console.error('Error uploading video to Cloudinary:', error);
+    throw error;
+  }
+};
+
+// Helper function to get optimized/compressed video URL from Cloudinary
+export const getOptimizedVideoUrl = (
+  videoUrl: string,
+  options: {
+    quality?: 'auto' | 'best' | 'good' | 'eco' | 'low';
+    bitRate?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+    format?: 'mp4' | 'webm' | 'auto';
+  } = {}
+): string => {
+  // If not a Cloudinary URL, return as-is
+  if (!videoUrl.includes('cloudinary.com')) {
+    return videoUrl;
+  }
+  
+  // Build transformation string
+  const transformations: string[] = [];
+  
+  if (options.quality) {
+    transformations.push(`q_${options.quality}`);
+  } else {
+    transformations.push('q_auto');
+  }
+  
+  if (options.bitRate) {
+    transformations.push(`br_${options.bitRate}`);
+  } else {
+    transformations.push('br_1m'); // Default 1 Mbps
+  }
+  
+  if (options.maxWidth) {
+    transformations.push(`w_${options.maxWidth}`);
+  }
+  if (options.maxHeight) {
+    transformations.push(`h_${options.maxHeight}`);
+  }
+  
+  if (options.format) {
+    transformations.push(`f_${options.format}`);
+  } else {
+    transformations.push('f_auto');
+  }
+  
+  transformations.push('vc_h264');
+  transformations.push('ac_aac');
+  
+  const transformation = transformations.join(',');
+  
+  // Insert transformation into Cloudinary URL
+  const optimizedUrl = videoUrl.replace('/upload/', `/upload/${transformation}/`);
+  
+  return optimizedUrl;
+};
+

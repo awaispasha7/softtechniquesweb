@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getGeneratedVideos, GeneratedVideo } from "@/lib/videoService";
 
 type Status = "idle" | "starting" | "waiting" | "done" | "error";
 
@@ -15,6 +16,10 @@ export default function GenerateVideoPage() {
   const [videoName, setVideoName] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loadingMessage, setLoadingMessage] = useState<string>("");
+  const [showExamples, setShowExamples] = useState(false);
+  const [exampleVideos, setExampleVideos] = useState<GeneratedVideo[]>([]);
+  const [loadingExamples, setLoadingExamples] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<GeneratedVideo | null>(null);
 
   // Rotating loading messages
   useEffect(() => {
@@ -300,14 +305,37 @@ export default function GenerateVideoPage() {
       <main className="relative flex-1 pt-28 pb-16">
         <div className="max-w-5xl mx-auto px-6 lg:px-8 space-y-10">
           <header className="space-y-4">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold">
-              AI Video Generation (Beta)
-            </h1>
-            <p className="text-white/80 max-w-2xl">
-              Describe the video you want, choose a duration, and we&apos;ll
-              generate it with our Sora-powered workflow. Your video will appear
-              below as soon as it&apos;s ready.
-            </p>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex-1">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold">
+                  AI Video Generation (Beta)
+                </h1>
+                <p className="text-white/80 max-w-2xl mt-2">
+                  Describe the video you want, choose a duration, and we&apos;ll
+                  generate it with our Sora-powered workflow. Your video will appear
+                  below as soon as it&apos;s ready.
+                </p>
+              </div>
+              <button
+                onClick={async () => {
+                  setShowExamples(true);
+                  if (exampleVideos.length === 0) {
+                    setLoadingExamples(true);
+                    try {
+                      const videos = await getGeneratedVideos();
+                      setExampleVideos(videos.filter(v => v.status === 'done'));
+                    } catch (error) {
+                      console.error('Error loading example videos:', error);
+                    } finally {
+                      setLoadingExamples(false);
+                    }
+                  }
+                }}
+                className="inline-flex items-center justify-center border-2 border-white/40 text-white px-6 py-3 rounded-full font-semibold text-sm hover:bg-white/10 hover:border-white/60 transition-all"
+              >
+                View Examples
+              </button>
+            </div>
           </header>
 
           <section>
@@ -412,6 +440,165 @@ export default function GenerateVideoPage() {
       </main>
 
       <Footer />
+
+      {/* Video Examples Modal */}
+      {showExamples && (
+        <div 
+          className="fixed inset-0 bg-[#29473d]/95 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowExamples(false);
+              setSelectedVideo(null);
+            }
+          }}
+        >
+          <div className="bg-[#29473d] backdrop-blur-sm rounded-3xl max-w-6xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
+            {/* Animated background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-white/10 rounded-3xl pointer-events-none"></div>
+            
+            {/* Close Button */}
+            <div className="absolute top-6 right-6 z-50">
+              <button
+                onClick={() => {
+                  setShowExamples(false);
+                  setSelectedVideo(null);
+                }}
+                className="w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer"
+                aria-label="Close modal"
+                type="button"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-10 relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                Generated Video Examples
+              </h2>
+
+              {loadingExamples ? (
+                <div className="flex items-center justify-center py-20">
+                  <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
+                </div>
+              ) : exampleVideos.length === 0 ? (
+                <div className="text-center py-20 text-white/60">
+                  <p className="text-lg">No example videos yet.</p>
+                  <p className="text-sm mt-2">Generate your first video to see it here!</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {exampleVideos.map((video) => (
+                    <div
+                      key={video.id}
+                      onClick={() => setSelectedVideo(video)}
+                      className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 hover:border-white/30 transition-all cursor-pointer group"
+                    >
+                      <div className="aspect-video bg-black/40 rounded-lg mb-3 overflow-hidden relative">
+                        {video.videoUrl ? (
+                          <video
+                            className="w-full h-full object-cover"
+                            src={video.videoUrl}
+                            muted
+                            playsInline
+                            onMouseEnter={(e) => {
+                              const target = e.target as HTMLVideoElement;
+                              target.play().catch(() => {});
+                            }}
+                            onMouseLeave={(e) => {
+                              const target = e.target as HTMLVideoElement;
+                              target.pause();
+                              target.currentTime = 0;
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <svg className="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                        )}
+                      </div>
+                      {video.videoName && (
+                        <h3 className="text-white font-semibold text-sm mb-2 line-clamp-2 group-hover:text-white transition-colors">
+                          {video.videoName}
+                        </h3>
+                      )}
+                      <p className="text-white/60 text-xs line-clamp-2 mb-2">
+                        {video.prompt}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-white/40">
+                        <span>{video.duration}s</span>
+                        <span>•</span>
+                        <span>{new Date(video.createdAt?.toDate?.() || video.createdAt).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Selected Video Modal */}
+      {selectedVideo && (
+        <div 
+          className="fixed inset-0 bg-[#29473d]/95 backdrop-blur-md z-[60] flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSelectedVideo(null);
+            }
+          }}
+        >
+          <div className="bg-[#29473d] backdrop-blur-sm rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
+            {/* Close Button */}
+            <div className="absolute top-6 right-6 z-50">
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer"
+                aria-label="Close modal"
+                type="button"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Video Content */}
+            <div className="p-10 relative z-10">
+              {selectedVideo.videoName && (
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                  {selectedVideo.videoName}
+                </h2>
+              )}
+              {selectedVideo.prompt && (
+                <p className="text-white/80 mb-6">
+                  <span className="font-semibold">Prompt:</span> {selectedVideo.prompt}
+                </p>
+              )}
+              {selectedVideo.videoUrl && (
+                <div className="bg-black/60 border border-white/15 rounded-2xl p-4">
+                  <video
+                    className="w-full rounded-xl shadow-2xl"
+                    src={selectedVideo.videoUrl}
+                    controls
+                    autoPlay
+                  />
+                </div>
+              )}
+              <div className="flex items-center gap-4 mt-6 text-sm text-white/60">
+                <span>Duration: {selectedVideo.duration}s</span>
+                <span>•</span>
+                <span>Created: {new Date(selectedVideo.createdAt?.toDate?.() || selectedVideo.createdAt).toLocaleDateString()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
