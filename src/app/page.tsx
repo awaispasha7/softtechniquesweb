@@ -14,6 +14,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import ChatProvider from "@/components/ChatProvider";
+import VideoGenButton from "@/components/VideoGenButton";
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -61,7 +62,7 @@ function HomeContent() {
       <HeroSection />
 
       {/* AI Video Generation CTA - Prominent Section */}
-      <section className="relative bg-gradient-to-br from-[#29473d] via-[#1a3329] to-[#0f1f1a] text-white border-y-2 border-white/20 overflow-hidden">
+      <section id="video-generation" className="relative bg-linear-to-br from-[#29473d] via-[#1a3329] to-[#0f1f1a] text-white border-y-2 border-white/20 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
@@ -84,34 +85,33 @@ function HomeContent() {
 
           <div className="grid gap-12 md:grid-cols-2 items-center">
             <div className="space-y-6 md:space-y-8">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Try Our New{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">
-                  AI Video Generation
-                </span>{' '}
-                Module
-              </h2>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+                  Try Our New{' '}
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-white to-blue-200">
+                    AI Video Generation
+                  </span>{' '}
+                  Module
+                </h2>
               <p className="text-lg md:text-xl text-white/90 max-w-xl leading-relaxed">
-                Transform your ideas into stunning videos in seconds. Powered by OpenAI&apos;s Sora 2, 
-                our video generation tool lets you create professional-quality clips from simple text prompts.
+                Transform your ideas into stunning videos in seconds. Powered by modern AI tools 
+                (Sora 2, Grok Imagine, Veo 3.1 and many more), our video generation tool lets you 
+                create professional-quality clips from simple text prompts.
               </p>
               
               <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/generate-video"
+                <a
+                  href="#video-generation"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('video-generation')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   className="group inline-flex items-center justify-center bg-white text-[#29473d] px-8 py-4 rounded-full font-bold text-base shadow-2xl hover:shadow-white/50 hover:bg-white/90 hover:scale-105 transition-all"
                 >
                   Generate Video Now
                   <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                </Link>
-                <Link
-                  href="/generate-video"
-                  className="inline-flex items-center justify-center border-2 border-white/40 text-white px-6 py-4 rounded-full font-semibold text-sm hover:bg-white/10 hover:border-white/60 transition-all"
-                >
-                  Learn More
-                </Link>
+                </a>
               </div>
             </div>
             
@@ -147,9 +147,9 @@ function HomeContent() {
                 </ul>
               </div>
               
-              <div className="bg-gradient-to-r from-white/10 to-blue-500/10 border border-white/20 rounded-xl p-4 text-center">
+              <div className="bg-linear-to-r from-white/10 to-blue-500/10 border border-white/20 rounded-xl p-4 text-center">
                 <p className="text-sm text-white font-semibold">
-                  🎬 Powered by OpenAI Sora 2 · Beta Access Available Now
+                  🎬 Powered by modern tools (Sora 2, Grok Imagine, Veo 3.1 and many more) · Beta Access Available Now
                 </p>
               </div>
             </div>
@@ -164,6 +164,9 @@ function HomeContent() {
       <TestimonialsSection />
       <ContactSection />
       <Footer />
+      
+      {/* Floating Video Generation Button */}
+      <VideoGenButton />
     </div>
   );
 }

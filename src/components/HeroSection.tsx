@@ -95,9 +95,13 @@ export default function HeroSection() {
             
             {/* Video Generation CTA */}
             <div className="pt-6 animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-              <Link
-                href="/generate-video"
-                className="group inline-flex items-center gap-2 bg-gradient-to-r from-white to-blue-100 text-[#29473d] px-6 py-3 rounded-full text-sm font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all animate-pulse hover:animate-none"
+              <a
+                href="#video-generation"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('video-generation')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="group inline-flex items-center gap-2 bg-linear-to-r from-white to-blue-100 text-[#29473d] px-6 py-3 rounded-full text-sm font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all animate-pulse hover:animate-none"
               >
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#29473d] opacity-75"></span>
@@ -107,7 +111,7 @@ export default function HeroSection() {
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -122,7 +126,7 @@ export default function HeroSection() {
                 className="w-full h-auto object-cover"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent"></div>
             </div>
             <p className="text-white/60 text-sm mt-4 text-center italic">
               Photo by Unsplash (replace with project visuals)
