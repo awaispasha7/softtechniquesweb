@@ -38,7 +38,7 @@ export default function HeroSection() {
   }, [isClient]);
 
   return (
-    <section className="relative min-h-screen bg-[#29473d] overflow-hidden">
+    <section className="relative min-h-screen bg-[#44559e] overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500 rounded-full blur-3xl"></div>
@@ -75,7 +75,7 @@ export default function HeroSection() {
             <div className="flex flex-wrap gap-4 pt-4 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
               <Link
                 href="#services"
-                className="group bg-white text-[#29473d] px-8 py-4 rounded-full font-bold text-base hover:bg-white/90 transition-all hover:scale-105 shadow-xl hover:shadow-2xl flex items-center gap-2"
+                className="group bg-white text-[#44559e] px-8 py-4 rounded-full font-bold text-base hover:bg-white/90 transition-all hover:scale-105 shadow-xl hover:shadow-2xl flex items-center gap-2"
               >
                 Explore Services
                 <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ export default function HeroSection() {
               </Link>
               <Link
                 href="#contact"
-                className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-base hover:bg-white hover:text-[#29473d] transition-all hover:scale-105 shadow-lg flex items-center gap-2"
+                className="group bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-base hover:bg-white hover:text-[#44559e] transition-all hover:scale-105 shadow-lg flex items-center gap-2"
               >
                 Talk to Us
                 <svg className="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,11 +101,11 @@ export default function HeroSection() {
                   e.preventDefault();
                   document.getElementById('video-generation')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="group inline-flex items-center gap-2 bg-linear-to-r from-white to-blue-100 text-[#29473d] px-6 py-3 rounded-full text-sm font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all animate-pulse hover:animate-none"
+                className="group inline-flex items-center gap-2 bg-linear-to-r from-white to-blue-100 text-[#44559e] px-6 py-3 rounded-full text-sm font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all animate-pulse hover:animate-none"
               >
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#29473d] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#29473d]"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#44559e] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#44559e]"></span>
                 </span>
                 Try Our New AI Video Generator
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

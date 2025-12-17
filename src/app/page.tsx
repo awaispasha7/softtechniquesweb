@@ -62,7 +62,7 @@ function HomeContent() {
       <HeroSection />
 
       {/* AI Video Generation CTA - Prominent Section */}
-      <section id="video-generation" className="relative bg-linear-to-br from-[#29473d] via-[#1a3329] to-[#0f1f1a] text-white border-y-2 border-white/20 overflow-hidden">
+      <section id="video-generation" className="relative bg-linear-to-br from-[#44559e] via-[#36447e] to-[#2a3360] text-white border-y-2 border-white/20 overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-3xl animate-pulse"></div>
@@ -101,7 +101,7 @@ function HomeContent() {
               <div className="flex flex-wrap gap-4">
                 <Link
                   href="/generate-video"
-                  className="group inline-flex items-center justify-center bg-white text-[#29473d] px-8 py-4 rounded-full font-bold text-base shadow-2xl hover:shadow-white/50 hover:bg-white/90 hover:scale-105 transition-all"
+                  className="group inline-flex items-center justify-center bg-white text-[#44559e] px-8 py-4 rounded-full font-bold text-base shadow-2xl hover:shadow-white/50 hover:bg-white/90 hover:scale-105 transition-all"
                 >
                   Generate Video Now
                   <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

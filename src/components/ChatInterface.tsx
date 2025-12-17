@@ -33,7 +33,7 @@ export default function ChatInterface({ isOpen, onClose }: ChatInterfaceProps) {
       if (currentIndex <= fullText.length) {
         const partialText = fullText.substring(0, currentIndex);
         const formattedText = partialText
-          .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #10B981; font-weight: 700;">$1</strong>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #a0b0ff; font-weight: 700;">$1</strong>')
           .replace(/\*(.*?)\*/g, '<em style="color: #E5E7EB; font-weight: 600;">$1</em>');
         messageElement.innerHTML = formattedText;
         currentIndex++;
@@ -188,17 +188,16 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
       {/* Chat Interface */}
       <div className="fixed top-16 sm:top-20 left-2 right-2 sm:left-auto sm:right-4 md:right-8 bottom-4 sm:bottom-16 z-[100] w-[calc(100%-1rem)] sm:w-96 md:w-[28rem] max-h-[calc(100vh-5rem)] sm:max-h-[calc(100vh-9rem)] flex flex-col animate-in slide-in-from-right-5 duration-300 max-w-full">
         {/* Chat Window */}
-        <div className="relative bg-[#3a5a4f] rounded-lg shadow-xl w-full h-full flex flex-col border border-[#4a6b5f]">
+        <div className="relative bg-[#44559e] rounded-lg shadow-xl w-full h-full flex flex-col border border-[#5566b0]">
           {/* Header */}
-          <div className="flex items-center justify-between p-3 sm:p-4 border-b border-[#4a6b5f] bg-[#2d4539] rounded-t-lg">
+          <div className="flex items-center justify-between p-3 sm:p-4 border-b border-[#5566b0] bg-[#36447e] rounded-t-lg">
             <div className="flex items-center gap-2 sm:gap-3">
               <Image
-                src="/logo9.png"
-                alt="Soft Techniques Logo"
+                src="/logo10.png"
+                alt="SoftTechniques Logo"
                 width={32}
                 height={32}
-                className="object-contain rounded-lg"
-                style={{ width: 'auto', height: 'auto' }}
+                className="h-8 w-auto object-contain rounded-lg"
               />
               <div>
                 <h3 className="font-medium text-white text-xs sm:text-sm">Soft Techniques</h3>
@@ -207,7 +206,7 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
             <div className="flex items-center gap-1 sm:gap-2">
               <button
                 onClick={handleScheduleClick}
-                className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-green-600 to-green-500 text-white text-xs rounded-md hover:from-green-700 hover:to-green-600 transition-all font-medium"
+                className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-[#44559e] to-[#5566b0] text-white text-xs rounded-md hover:from-[#36447e] hover:to-[#44559e] transition-all font-medium"
               >
                 <span className="hidden sm:inline">Schedule Consultation</span>
                 <span className="sm:hidden">Schedule</span>
@@ -225,7 +224,7 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 p-3 sm:p-6 overflow-y-auto bg-[#3a5a4f]">
+          <div className="flex-1 p-3 sm:p-6 overflow-y-auto bg-[#44559e]">
             <div className="space-y-4 sm:space-y-6">
                 {messages.map((message) => (
                   <div
@@ -235,8 +234,8 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
                     <div
                       className={`max-w-[85%] sm:max-w-[80%] px-3 py-2 sm:px-4 sm:py-3 rounded-2xl shadow-lg ${
                         message.type === 'user'
-                          ? 'bg-gradient-to-r from-green-600 to-green-500 text-white'
-                          : 'bg-[#2d4539]/90 text-white border border-[#4a6b5f]/50 backdrop-blur-sm'
+                          ? 'bg-gradient-to-r from-[#44559e] to-[#5566b0] text-white'
+                          : 'bg-[#36447e]/90 text-white border border-[#5566b0]/50 backdrop-blur-sm'
                       }`}
                     >
                       {message.type === 'assistant' && message.isTyping ? (
@@ -248,7 +247,7 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
                           className="text-xs sm:text-sm leading-relaxed whitespace-pre-line"
                           dangerouslySetInnerHTML={{
                             __html: message.content
-                              .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #10B981; font-weight: 700;">$1</strong>')
+                              .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #a0b0ff; font-weight: 700;">$1</strong>')
                               .replace(/\*(.*?)\*/g, '<em style="color: #E5E7EB; font-weight: 600;">$1</em>')
                           }}
                         />
@@ -259,13 +258,13 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
                 
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-[#2d4539]/90 text-white border border-[#4a6b5f]/50 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-sm shadow-lg">
+                    <div className="bg-[#36447e]/90 text-white border border-[#5566b0]/50 px-3 py-2 sm:px-4 sm:py-3 rounded-2xl backdrop-blur-sm shadow-lg">
                       <div className="flex items-center gap-2 sm:gap-3">
                         <span className="text-xs sm:text-sm text-gray-300">SoftBot is typing</span>
                         <div className="flex gap-1">
-                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-bounce"></div>
-                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#5566b0] rounded-full animate-bounce"></div>
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#5566b0] rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#5566b0] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                         </div>
                       </div>
                     </div>
@@ -276,7 +275,7 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
           </div>
 
           {/* Input Area */}
-          <div className="p-3 sm:p-6 border-t border-[#4a6b5f] bg-gradient-to-r from-[#2d4539] to-[#3a5a4f]">
+          <div className="p-3 sm:p-6 border-t border-[#5566b0] bg-gradient-to-r from-[#36447e] to-[#44559e]">
             <div className="flex gap-2 sm:gap-3">
               <input
                 type="text"
@@ -284,12 +283,12 @@ I'm your **AI Solutions Expert**! I specialize in transforming businesses with c
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about AI solutions..."
-                className="flex-1 px-3 py-2 sm:px-4 sm:py-3 border border-[#4a6b5f] rounded-xl bg-[#2d4539]/80 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 text-sm sm:text-base transition-all duration-300 hover:border-[#5a7b6f]"
+                className="flex-1 px-3 py-2 sm:px-4 sm:py-3 border border-[#5566b0] rounded-xl bg-[#36447e]/80 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5566b0]/50 focus:border-[#5566b0]/50 text-sm sm:text-base transition-all duration-300 hover:border-[#6677c0]"
               />
               <button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim()}
-                className="px-3 py-2 sm:px-4 sm:py-3 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-green-500/25 transform hover:scale-105 disabled:transform-none"
+                className="px-3 py-2 sm:px-4 sm:py-3 bg-gradient-to-r from-[#44559e] to-[#5566b0] text-white rounded-xl hover:from-[#36447e] hover:to-[#44559e] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-[#5566b0]/25 transform hover:scale-105 disabled:transform-none"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1">
                   <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

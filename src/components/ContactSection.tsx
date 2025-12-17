@@ -62,7 +62,7 @@ export default function ContactSection() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Get in <span className="text-[#29473d]">Touch</span>
+            Get in <span className="text-[#44559e]">Touch</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Tell us what you&apos;re working on—let&apos;s map the next steps.
@@ -72,12 +72,12 @@ export default function ContactSection() {
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="group bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 animate-fade-in-up hover:border-[#29473d] relative overflow-hidden">
+          <div className="group bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 animate-fade-in-up hover:border-[#44559e] relative overflow-hidden">
             {/* Gradient overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#29473d]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#44559e]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             
             {/* Decorative element */}
-            <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#29473d]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#44559e]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
             
             <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
               {/* Success Message */}
@@ -112,7 +112,7 @@ export default function ContactSection() {
                   onChange={handleChange}
                   required
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#29473d] focus:border-transparent transition-all outline-none disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#44559e] focus:border-transparent transition-all outline-none disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
                 />
               </div>
 
@@ -132,7 +132,7 @@ export default function ContactSection() {
                   onChange={handleChange}
                   required
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#29473d] focus:border-transparent transition-all outline-none disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#44559e] focus:border-transparent transition-all outline-none disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
                 />
               </div>
 
@@ -152,7 +152,7 @@ export default function ContactSection() {
                   required
                   rows={6}
                   disabled={isSubmitting}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#29473d] focus:border-transparent transition-all outline-none resize-none disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#44559e] focus:border-transparent transition-all outline-none resize-none disabled:bg-gray-100 disabled:cursor-not-allowed text-gray-900"
                 />
               </div>
 
@@ -160,7 +160,7 @@ export default function ContactSection() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#29473d] text-white py-4 rounded-lg font-semibold text-lg hover:bg-[#1e3a2e] transition-colors shadow-lg hover:shadow-xl disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+                className="w-full bg-[#44559e] text-white py-4 rounded-lg font-semibold text-lg hover:bg-[#36447e] transition-colors shadow-lg hover:shadow-xl disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
               >
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
@@ -176,7 +176,7 @@ export default function ContactSection() {
                 Or email us directly at{" "}
                 <a
                   href="mailto:hello@softtechniques.com"
-                  className="text-[#29473d] hover:underline"
+                  className="text-[#44559e] hover:underline"
                 >
                 ask@softtechniques.com
                 </a>
@@ -187,17 +187,17 @@ export default function ContactSection() {
 
           {/* Company Details */}
           <div
-            className="group bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 animate-fade-in-up hover:border-[#29473d] relative overflow-hidden"
+            className="group bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 animate-fade-in-up hover:border-[#44559e] relative overflow-hidden"
             style={{ animationDelay: "200ms" }}
           >
             {/* Gradient overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#29473d]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#44559e]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             
             {/* Decorative element */}
-            <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#29473d]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#44559e]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
             
             <div className="relative z-10">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6 group-hover:text-[#29473d] transition-colors duration-300">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 group-hover:text-[#44559e] transition-colors duration-300">
                 Company Details
               </h3>
 
@@ -216,7 +216,7 @@ export default function ContactSection() {
                   <span className="font-semibold">Email:</span>{" "}
                   <a
                     href="mailto:hello@softtechniques.com"
-                    className="text-[#29473d] hover:underline"
+                    className="text-[#44559e] hover:underline"
                   >
                      ask@softtechniques.com
                   </a>
@@ -228,7 +228,7 @@ export default function ContactSection() {
                   <span className="font-semibold">Phone:</span>{" "}
                   <a
                     href="tel:+15550123456"
-                    className="text-[#29473d] hover:underline"
+                    className="text-[#44559e] hover:underline"
                   >
                     +1 (555) 012-3456
                   </a>
@@ -249,7 +249,7 @@ export default function ContactSection() {
                     href="https://www.linkedin.com/company/softtechniques/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-900 hover:text-[#29473d] transition-colors underline font-medium"
+                    className="text-gray-900 hover:text-[#44559e] transition-colors underline font-medium"
                   >
                     LinkedIn
                   </a>
@@ -257,7 +257,7 @@ export default function ContactSection() {
                     href="https://www.instagram.com/softtechniques"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-900 hover:text-[#29473d] transition-colors underline font-medium"
+                    className="text-gray-900 hover:text-[#44559e] transition-colors underline font-medium"
                   >
                     Instagram
                   </a>
@@ -265,7 +265,7 @@ export default function ContactSection() {
                     href="https://github.com/gspec-1"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-900 hover:text-[#29473d] transition-colors underline font-medium"
+                    className="text-gray-900 hover:text-[#44559e] transition-colors underline font-medium"
                   >
                     GitHub
                   </a>

@@ -345,7 +345,7 @@ export default function GenerateVideoPage() {
   const isBusy = status === "starting" || status === "waiting";
 
   return (
-    <div className="min-h-screen bg-[#29473d] text-white flex flex-col">
+    <div className="min-h-screen bg-[#44559e] text-white flex flex-col">
       <Navbar />
 
       {/* Decorative background similar to HeroSection */}
@@ -423,7 +423,7 @@ export default function GenerateVideoPage() {
                   <p className="text-sm sm:text-base text-white/80">Sign in to generate videos</p>
                   <Link
                     href="/auth/login"
-                    className="px-4 py-2.5 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold text-center"
+                    className="px-4 py-2.5 bg-white text-[#44559e] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold text-center"
                   >
                     Sign In
                   </Link>
@@ -463,15 +463,15 @@ export default function GenerateVideoPage() {
                       onChange={(e) => setDuration(e.target.value)}
                       disabled={isBusy}
                     >
-                      <option value="10" className="bg-[#29473d] text-white">10 seconds</option>
-                      <option value="15" className="bg-[#29473d] text-white">15 seconds</option>
+                      <option value="10" className="bg-[#44559e] text-white">10 seconds</option>
+                      <option value="15" className="bg-[#44559e] text-white">15 seconds</option>
                     </select>
                   </div>
 
                   <button
                     type="submit"
                     disabled={isBusy || (credits !== null && credits <= 0 && !isUnlimited)}
-                    className="w-full sm:w-auto mt-0 sm:mt-0 inline-flex items-center justify-center bg-white text-[#29473d] px-6 sm:px-8 py-3 rounded-full font-bold text-sm sm:text-base shadow-xl hover:shadow-2xl hover:bg-white/90 hover:scale-105 transition-all disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed min-h-[44px]"
+                    className="w-full sm:w-auto mt-0 sm:mt-0 inline-flex items-center justify-center bg-white text-[#44559e] px-6 sm:px-8 py-3 rounded-full font-bold text-sm sm:text-base shadow-xl hover:shadow-2xl hover:bg-white/90 hover:scale-105 transition-all disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed min-h-[44px]"
                   >
                     {status === "starting"
                       ? "Starting..."
@@ -534,7 +534,7 @@ export default function GenerateVideoPage() {
               <button
                 type="button"
                 onClick={reset}
-                className="inline-flex items-center justify-center border border-white/40 text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-white hover:text-[#29473d] transition-all"
+                className="inline-flex items-center justify-center border border-white/40 text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-white hover:text-[#44559e] transition-all"
               >
                 Generate another video
               </button>
@@ -548,7 +548,7 @@ export default function GenerateVideoPage() {
       {/* Video Examples Modal */}
       {showExamples && (
         <div 
-          className="fixed inset-0 bg-[#29473d]/95 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+          className="fixed inset-0 bg-[#44559e]/95 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setShowExamples(false);
@@ -556,7 +556,7 @@ export default function GenerateVideoPage() {
             }
           }}
         >
-          <div className="bg-[#29473d] backdrop-blur-sm rounded-3xl max-w-6xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
+          <div className="bg-[#44559e] backdrop-blur-sm rounded-3xl max-w-6xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
             {/* Animated background */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-white/10 rounded-3xl pointer-events-none"></div>
             
@@ -650,14 +650,14 @@ export default function GenerateVideoPage() {
       {/* Selected Video Modal */}
       {selectedVideo && (
         <div 
-          className="fixed inset-0 bg-[#29473d]/95 backdrop-blur-md z-[60] flex items-center justify-center p-4 animate-in fade-in duration-300"
+          className="fixed inset-0 bg-[#44559e]/95 backdrop-blur-md z-[60] flex items-center justify-center p-4 animate-in fade-in duration-300"
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               setSelectedVideo(null);
             }
           }}
         >
-          <div className="bg-[#29473d] backdrop-blur-sm rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
+          <div className="bg-[#44559e] backdrop-blur-sm rounded-3xl max-w-4xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
             {/* Close Button */}
             <div className="absolute top-6 right-6 z-50">
               <button

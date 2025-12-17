@@ -6,12 +6,12 @@ export default function VideoGenButton() {
   return (
     <Link
       href="/generate-video"
-      className="fixed left-4 sm:left-8 bottom-8 z-50 flex items-center gap-3 px-5 sm:px-6 py-4 sm:py-4 bg-linear-to-r from-white to-blue-100 hover:from-blue-50 hover:to-white text-[#29473d] font-bold rounded-2xl shadow-2xl hover:shadow-white/50 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm border border-white/40 animate-pulse hover:animate-none"
+      className="fixed left-2 sm:left-4 md:left-8 bottom-4 sm:bottom-8 z-30 flex items-center gap-2 sm:gap-3 px-3 sm:px-5 md:px-6 py-3 sm:py-4 bg-gradient-to-r from-[#44559e] to-[#36447e] hover:from-[#36447e] hover:to-[#2a3360] text-white font-semibold rounded-2xl shadow-2xl hover:shadow-[#5566b0]/25 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm border border-[#5566b0]/20 max-w-[calc(100vw-1rem)] animate-pulse hover:animate-none"
       aria-label="Generate AI Video"
     >
       {/* Video Icon */}
       <svg 
-        className="w-6 h-6" 
+        className="w-5 h-5 sm:w-6 sm:h-6" 
         fill="none" 
         stroke="currentColor" 
         viewBox="0 0 24 24"
@@ -20,7 +20,7 @@ export default function VideoGenButton() {
       </svg>
       
       {/* Button Text */}
-      <span className="text-[#29473d] font-bold text-sm sm:text-base">Generate Video</span>
+      <span className="text-white font-semibold text-sm sm:text-base">Generate Video</span>
     </Link>
   );
 }

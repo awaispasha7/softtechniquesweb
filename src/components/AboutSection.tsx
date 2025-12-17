@@ -5,7 +5,7 @@ export default function AboutSection() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            About <span className="text-[#29473d]">SoftTechniques</span>
+            About <span className="text-[#44559e]">SoftTechniques</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             We bridge the gap between people and technology.
@@ -16,11 +16,11 @@ export default function AboutSection() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Main Description Card */}
           <div
-            className="group bg-white rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border border-gray-200 animate-fade-in-up hover:border-[#29473d] relative overflow-hidden"
+            className="group bg-white rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border border-gray-200 animate-fade-in-up hover:border-[#44559e] relative overflow-hidden"
             style={{ animationDelay: "0ms" }}
           >
             {/* Gradient overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#29473d]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[#44559e]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             
             {/* Content */}
             <div className="relative z-10">
@@ -35,17 +35,17 @@ export default function AboutSection() {
 
               <ul className="space-y-3">
                 <li className="flex items-start gap-3 text-gray-700 group-hover:translate-x-1 transition-transform duration-300" style={{ transitionDelay: "0ms" }}>
-                  <span className="text-[#29473d] text-xl font-bold mt-0.5">•</span>
+                  <span className="text-[#44559e] text-xl font-bold mt-0.5">•</span>
                   <span className="text-lg font-medium">Outcome-first consulting</span>
                 </li>
                 <li className="flex items-start gap-3 text-gray-700 group-hover:translate-x-1 transition-transform duration-300" style={{ transitionDelay: "50ms" }}>
-                  <span className="text-[#29473d] text-xl font-bold mt-0.5">•</span>
+                  <span className="text-[#44559e] text-xl font-bold mt-0.5">•</span>
                   <span className="text-lg font-medium">
                     Human-centered adoption & enablement
                   </span>
                 </li>
                 <li className="flex items-start gap-3 text-gray-700 group-hover:translate-x-1 transition-transform duration-300" style={{ transitionDelay: "100ms" }}>
-                  <span className="text-[#29473d] text-xl font-bold mt-0.5">•</span>
+                  <span className="text-[#44559e] text-xl font-bold mt-0.5">•</span>
                   <span className="text-lg font-medium">
                     Modern architectures and pragmatic automation
                   </span>
@@ -54,22 +54,22 @@ export default function AboutSection() {
             </div>
 
             {/* Decorative element */}
-            <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#29473d]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+            <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#44559e]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
           </div>
 
           {/* Side Cards */}
           <div className="space-y-8">
             {/* Industries Card */}
             <div
-              className="group bg-white rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border border-gray-200 animate-fade-in-up hover:border-[#29473d] relative overflow-hidden"
+              className="group bg-white rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border border-gray-200 animate-fade-in-up hover:border-[#44559e] relative overflow-hidden"
               style={{ animationDelay: "150ms" }}
             >
               {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#29473d]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#44559e]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Content */}
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#29473d] transition-colors duration-300">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#44559e] transition-colors duration-300">
                   Industries
                 </h3>
                 <p className="text-lg text-gray-700 leading-relaxed font-medium">
@@ -79,20 +79,20 @@ export default function AboutSection() {
               </div>
 
               {/* Decorative element */}
-              <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#29473d]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+              <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#44559e]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
             </div>
 
             {/* Tech Stack Card */}
             <div
-              className="group bg-white rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border border-gray-200 animate-fade-in-up hover:border-[#29473d] relative overflow-hidden"
+              className="group bg-white rounded-2xl p-8 hover:shadow-2xl hover:-translate-y-3 transition-all duration-500 border border-gray-200 animate-fade-in-up hover:border-[#44559e] relative overflow-hidden"
               style={{ animationDelay: "300ms" }}
             >
               {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#29473d]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-[#44559e]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               
               {/* Content */}
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#29473d] transition-colors duration-300">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-[#44559e] transition-colors duration-300">
                   Tech Stack
                 </h3>
                 <p className="text-lg text-gray-700 leading-relaxed font-medium">
@@ -102,7 +102,7 @@ export default function AboutSection() {
               </div>
 
               {/* Decorative element */}
-              <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#29473d]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+              <div className="absolute -bottom-2 -right-2 w-20 h-20 bg-[#44559e]/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
             </div>
           </div>
         </div>

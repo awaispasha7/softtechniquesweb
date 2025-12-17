@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#29473d] text-white relative overflow-hidden">
+    <footer className="bg-[#44559e] text-white relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-10 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse"></div>
@@ -16,13 +16,13 @@ export default function Footer() {
         <div className="py-16 grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Company Info */}
           <div className="lg:col-span-1 animate-fade-in-up">
-            <div className="mb-6 -mt-[100px]">
+            <div className="mb-6">
               <Image
-                src="/logo8.png"
+                src="/logo10.png"
                 alt="SoftTechniques Logo"
-                width={1000}
-                height={1000}
-                className="w-[200px] h-[200px] object-contain rounded-full"
+                width={200}
+                height={80}
+                className="h-16 lg:h-20 w-auto object-contain rounded-lg"
               />
             </div>
             <p className="text-gray-300 leading-relaxed hover:text-white transition-colors duration-300">
@@ -160,7 +160,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/company/softtechniques/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-white/10 hover:bg-white rounded-full flex items-center justify-center text-white hover:text-[#29473d] hover:scale-110 hover:rotate-6 transition-all duration-300 backdrop-blur-sm"
+                  className="w-10 h-10 bg-white/10 hover:bg-white rounded-full flex items-center justify-center text-white hover:text-[#44559e] hover:scale-110 hover:rotate-6 transition-all duration-300 backdrop-blur-sm"
                   aria-label="LinkedIn"
                 >
                   <svg
@@ -175,7 +175,7 @@ export default function Footer() {
                   href="https://www.instagram.com/softtechniques"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-white/10 hover:bg-white rounded-full flex items-center justify-center text-white hover:text-[#29473d] hover:scale-110 hover:rotate-6 transition-all duration-300 backdrop-blur-sm"
+                  className="w-10 h-10 bg-white/10 hover:bg-white rounded-full flex items-center justify-center text-white hover:text-[#44559e] hover:scale-110 hover:rotate-6 transition-all duration-300 backdrop-blur-sm"
                   aria-label="Instagram"
                 >
                   <svg
@@ -190,7 +190,7 @@ export default function Footer() {
                   href="https://github.com/gspec-1"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-white/10 hover:bg-white rounded-full flex items-center justify-center text-white hover:text-[#29473d] hover:scale-110 hover:rotate-6 transition-all duration-300 backdrop-blur-sm"
+                  className="w-10 h-10 bg-white/10 hover:bg-white rounded-full flex items-center justify-center text-white hover:text-[#44559e] hover:scale-110 hover:rotate-6 transition-all duration-300 backdrop-blur-sm"
                   aria-label="GitHub"
                 >
                   <svg

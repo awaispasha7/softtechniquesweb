@@ -20,18 +20,17 @@ export default function ChatBotButton({ className = '', isChatOpen, setChatOpen 
       {!isChatOpen && (
         <button
           onClick={toggleChatBot}
-          className={`fixed right-2 sm:right-4 md:right-8 bottom-4 sm:bottom-8 z-30 flex items-center gap-2 sm:gap-3 px-3 sm:px-5 md:px-6 py-3 sm:py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-2xl shadow-2xl hover:shadow-green-500/25 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm border border-green-500/20 max-w-[calc(100vw-1rem)] ${className}`}
+          className={`fixed right-2 sm:right-4 md:right-8 bottom-4 sm:bottom-8 z-30 flex items-center gap-2 sm:gap-3 px-3 sm:px-5 md:px-6 py-3 sm:py-4 bg-gradient-to-r from-[#44559e] to-[#36447e] hover:from-[#36447e] hover:to-[#2a3360] text-white font-semibold rounded-2xl shadow-2xl hover:shadow-[#5566b0]/25 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm border border-[#5566b0]/20 max-w-[calc(100vw-1rem)] ${className}`}
           aria-label="Open chat bot"
           style={{ display: isChatOpen ? 'none' : 'flex' }}
         >
         {/* Chat Bot Icon */}
         <Image
-          src="/logo9.png"
-          alt="Soft Techniques Logo"
+          src="/logo10.png"
+          alt="SoftTechniques Logo"
           width={24}
           height={24}
-          className="object-contain rounded-lg"
-          style={{ width: 'auto', height: 'auto' }}
+          className="h-6 w-auto object-contain rounded-lg"
         />
         
         {/* Button Text */}

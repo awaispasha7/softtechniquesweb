@@ -1395,25 +1395,25 @@ export default function BlogPage(): React.JSX.Element {
           display: inline-block;
         }
         .font-size-select {
-          background-color: #29473d !important;
+          background-color: #44559e !important;
         }
         .font-size-select option {
-          background-color: #29473d !important;
+          background-color: #44559e !important;
           color: #ffffff !important;
           padding: 8px !important;
         }
         .font-size-select option:hover {
-          background-color: #29473d !important;
+          background-color: #44559e !important;
         }
         .font-size-select option:checked,
         .font-size-select option:focus {
-          background-color: #29473d !important;
+          background-color: #44559e !important;
         }
         select.font-size-select {
           background-color: rgba(41, 71, 61, 0.8) !important;
         }
       `}} />
-      <div className="min-h-screen bg-[#29473d]">
+      <div className="min-h-screen bg-[#44559e]">
         <div className="relative z-50">
           <Navbar />
         </div>
@@ -1473,7 +1473,7 @@ export default function BlogPage(): React.JSX.Element {
                   <div className="flex gap-3 w-full sm:w-auto">
                     <Link
                       href="/auth/login"
-                      className="flex-1 sm:flex-none px-4 py-2.5 bg-white text-[#29473d] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold text-center min-h-[44px] touch-manipulation"
+                      className="flex-1 sm:flex-none px-4 py-2.5 bg-white text-[#44559e] hover:bg-white/90 rounded-lg transition-all text-sm font-semibold text-center min-h-[44px] touch-manipulation"
                     >
                       Sign In
                     </Link>
@@ -1511,7 +1511,7 @@ export default function BlogPage(): React.JSX.Element {
                 setIsWritingMode(!isWritingMode);
                 setIsUploadMode(false);
               }}
-            className="group relative bg-white text-[#29473d] px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:shadow-2xl hover:shadow-white/30 overflow-hidden"
+            className="group relative bg-white text-[#44559e] px-10 py-4 rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-110 hover:shadow-2xl hover:shadow-white/30 overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-300 flex items-center space-x-2">
@@ -1803,7 +1803,7 @@ export default function BlogPage(): React.JSX.Element {
                             onMouseDown={(e) => {
                               e.stopPropagation();
                             }}
-                            className="font-size-select px-3 py-1.5 bg-[#29473d] hover:bg-[#3a5a4f] text-white rounded text-sm font-medium cursor-pointer border border-white/20 focus:outline-none focus:border-white/40 transition-colors duration-200 appearance-none pr-8 min-w-[60px] text-center"
+                            className="font-size-select px-3 py-1.5 bg-[#44559e] hover:bg-[#36447e] text-white rounded text-sm font-medium cursor-pointer border border-white/20 focus:outline-none focus:border-white/40 transition-colors duration-200 appearance-none pr-8 min-w-[60px] text-center"
                             title="Font Size"
                             defaultValue="16"
                           >
@@ -1927,13 +1927,13 @@ export default function BlogPage(): React.JSX.Element {
                    <button
                      onClick={handlePublishPost}
                     disabled={!newPost.title || !newPost.content || savingPost}
-                     className="group relative bg-white text-[#29473d] px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-white/20 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
+                     className="group relative bg-white text-[#44559e] px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-white/20 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
                    >
                      <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-gray-200 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <span className="relative z-10 group-hover:text-gray-800 transition-colors duration-300 flex items-center gap-2">
                       {savingPost ? (
                          <>
-                          <div className="inline-block animate-spin rounded-full h-4 w-4 border-2 border-[#29473d] border-t-transparent"></div>
+                          <div className="inline-block animate-spin rounded-full h-4 w-4 border-2 border-[#44559e] border-t-transparent"></div>
                           <span>{isEditing ? 'Updating...' : 'Publishing...'}</span>
                          </>
                        ) : (
@@ -2018,7 +2018,7 @@ export default function BlogPage(): React.JSX.Element {
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-r from-white to-green-200 rounded-full flex items-center justify-center">
-                      <span className="text-[#29473d] font-bold text-xs">ST</span>
+                      <span className="text-[#44559e] font-bold text-xs">ST</span>
                     </div>
                     <div>
                       <p className="text-white text-sm font-medium">{post.author}</p>
@@ -2072,7 +2072,7 @@ export default function BlogPage(): React.JSX.Element {
                 {/* Read More Button */}
                 <button 
                   onClick={() => handleReadMore(post)}
-                  className="group/btn w-full bg-white text-[#29473d] hover:bg-white/90 py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-white/25 relative overflow-hidden"
+                  className="group/btn w-full bg-white text-[#44559e] hover:bg-white/90 py-3 px-6 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-white/25 relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700"></div>
                   <span className="relative z-10 flex items-center justify-center space-x-2">
@@ -2095,14 +2095,14 @@ export default function BlogPage(): React.JSX.Element {
        {/* Blog Post Modal */}
        {selectedPost && (
          <div 
-           className="fixed inset-0 bg-[#29473d]/95 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
+           className="fixed inset-0 bg-[#44559e]/95 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300"
            onClick={(e) => {
              if (e.target === e.currentTarget) {
                handleCloseModal();
              }
            }}
          >
-           <div className="bg-[#29473d] backdrop-blur-sm rounded-3xl max-w-5xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
+           <div className="bg-[#44559e] backdrop-blur-sm rounded-3xl max-w-5xl w-full max-h-[95vh] overflow-y-auto border border-white/20 relative shadow-2xl shadow-white/20 animate-in zoom-in-95 duration-300">
              {/* Animated background */}
              <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-white/10 rounded-3xl pointer-events-none"></div>
             
@@ -2147,7 +2147,7 @@ export default function BlogPage(): React.JSX.Element {
                 <div className="flex items-center space-x-6">
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-gradient-to-r from-white to-green-200 rounded-full flex items-center justify-center">
-                      <span className="text-[#29473d] font-bold">ST</span>
+                      <span className="text-[#44559e] font-bold">ST</span>
                     </div>
                     <div>
                       <p className="text-white font-semibold">By {selectedPost.author}</p>
@@ -2176,7 +2176,7 @@ export default function BlogPage(): React.JSX.Element {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-6">
                     <div className="w-16 h-16 bg-gradient-to-r from-white to-green-200 rounded-full flex items-center justify-center">
-                      <span className="text-[#29473d] font-bold text-xl">ST</span>
+                      <span className="text-[#44559e] font-bold text-xl">ST</span>
                     </div>
                     <div>
                       <p className="text-white font-bold text-lg">SoftTechniques Team</p>
@@ -2190,7 +2190,7 @@ export default function BlogPage(): React.JSX.Element {
                       e.stopPropagation();
                       handleCloseModal();
                     }}
-                    className="group bg-white text-[#29473d] px-8 py-4 rounded-2xl font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-white/20 relative overflow-hidden"
+                    className="group bg-white text-[#44559e] px-8 py-4 rounded-2xl font-bold transition-all duration-300 transform hover:scale-105 hover:shadow-xl hover:shadow-white/20 relative overflow-hidden"
                     aria-label="Close article"
                     type="button"
                   >

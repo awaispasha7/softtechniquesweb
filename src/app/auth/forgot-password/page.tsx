@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#29473d] flex flex-col">
+    <div className="min-h-screen bg-[#44559e] flex flex-col">
       <Navbar />
       
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-12 sm:py-20 relative">
@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         <div className="w-full max-w-md relative z-10">
-          <div className="bg-[#29473d] backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/20 p-6 sm:p-8 shadow-2xl shadow-white/20">
+          <div className="bg-[#44559e] backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/20 p-6 sm:p-8 shadow-2xl shadow-white/20">
             <div className="text-center mb-6 sm:mb-8">
               <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
                 Reset Password
@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
                 </div>
                 <Link
                   href="/auth/login"
-                  className="block w-full text-center bg-white text-[#29473d] hover:bg-white/90 py-3 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                  className="block w-full text-center bg-white text-[#44559e] hover:bg-white/90 py-3 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
                 >
                   Back to Sign In
                 </Link>
@@ -92,7 +92,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-white text-[#29473d] hover:bg-white/90 py-3 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                  className="w-full bg-white text-[#44559e] hover:bg-white/90 py-3 px-6 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Sending...' : 'Send Reset Link'}
                 </button>

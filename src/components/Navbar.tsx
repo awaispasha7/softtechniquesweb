@@ -77,19 +77,19 @@ export default function Navbar() {
   }, [dropdownTimeout]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[9999] bg-[#29473d] backdrop-blur-sm border-b-2 border-white/20">
+    <nav className="fixed top-0 left-0 right-0 z-[9999] bg-[#44559e] backdrop-blur-sm border-b-2 border-white/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20 w-full">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" onClick={closeMenu}>
-              <div className="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] lg:w-[200px] lg:h-[200px] rounded-full flex items-center justify-center -mt-2 -ml-2 sm:-ml-3 lg:-ml-4">
+              <div className="flex items-center justify-center">
                 <Image
-                  src="/logo8.png"
+                  src="/logo10.png"
                   alt="SoftTechniques Logo"
-                  width={1000}
-                  height={1000}
-                  className="w-full h-full object-contain"
+                  width={200}
+                  height={80}
+                  className="h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-lg"
                   priority
                 />
               </div>
@@ -145,13 +145,13 @@ export default function Navbar() {
               {/* Dropdown Menu */}
               {isResourcesDropdownOpen && (
                 <div 
-                  className="absolute right-0 mt-2 w-20 bg-white/10 backdrop-blur-sm rounded-md shadow-lg py-1 z-50 transform translate-x-4 border border-white/20"
+                  className="absolute right-0 mt-2 w-20 bg-white/30 backdrop-blur-sm rounded-md shadow-lg py-1 z-50 transform translate-x-4 border border-white/40"
                   onMouseEnter={handleDropdownMouseEnter}
                   onMouseLeave={handleDropdownMouseLeave}
                 >
                   <Link
                     href="/blog"
-                    className="block px-4 py-2 text-sm text-white hover:bg-white/20 transition-colors duration-200 text-center"
+                    className="block px-4 py-2 text-sm text-white hover:bg-white/40 transition-colors duration-200 text-center"
                     onClick={() => setIsResourcesDropdownOpen(false)}
                   >
                     Blog
@@ -199,7 +199,7 @@ export default function Navbar() {
             ) : null}
             <Link
               href="#about"
-              className="bg-white text-[#29473d] px-4 xl:px-6 py-1.5 xl:py-2 rounded-full font-medium text-sm xl:text-base hover:bg-white/90 transition-colors whitespace-nowrap"
+              className="bg-white text-[#44559e] px-4 xl:px-6 py-1.5 xl:py-2 rounded-full font-medium text-sm xl:text-base hover:bg-white/90 transition-colors whitespace-nowrap"
             >
               Get Started
             </Link>
@@ -231,7 +231,7 @@ export default function Navbar() {
 
         {/* Mobile/Tablet Menu */}
         <div
-          className={`lg:hidden transition-all duration-300 ease-in-out bg-[#29473d] ${
+          className={`lg:hidden transition-all duration-300 ease-in-out bg-[#44559e] ${
             isMenuOpen
               ? "max-h-96 opacity-100 pb-4"
               : "max-h-0 opacity-0 overflow-hidden"
@@ -301,7 +301,7 @@ export default function Navbar() {
             <Link
               href="#about"
               onClick={closeMenu}
-              className="bg-white text-[#29473d] px-6 py-3 rounded-full font-medium text-base hover:bg-white/90 transition-colors text-center mt-4"
+              className="bg-white text-[#44559e] px-6 py-3 rounded-full font-medium text-base hover:bg-white/90 transition-colors text-center mt-4"
             >
               Get Started
             </Link>
