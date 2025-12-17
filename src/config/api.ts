@@ -1,7 +1,7 @@
 // API Configuration
-// Uses env when provided, otherwise falls back to your Railway backend URL
-// Updated: Ready for production deployment
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://web-production-608ab4.up.railway.app';
+// Uses Next.js API routes as proxy to avoid CORS issues
+// The API routes proxy requests to the backend Railway URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || '/api';
 
 export const API_ENDPOINTS = {
   CHAT: `${API_BASE_URL}/chat`,
