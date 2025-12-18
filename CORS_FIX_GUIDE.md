@@ -39,3 +39,4 @@ After updating environment variables, Railway will automatically redeploy. Wait 
 ❌ Production has wrong environment variable set
 🔧 Fix: Remove `NEXT_PUBLIC_API_BASE_URL`, add `BACKEND_API_URL`
 
+

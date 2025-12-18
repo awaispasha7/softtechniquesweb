@@ -166,12 +166,11 @@ export default function SchedulePage() {
           
           <div className="flex items-center justify-center gap-3 mb-4">
             <Image
-              src="/logo9.png"
-              alt="Soft Techniques Logo"
-              width={48}
-              height={48}
-              className="object-contain rounded-2xl"
-              style={{ width: 'auto', height: 'auto' }}
+              src="/logo10.png"
+              alt="SoftTechniques Logo"
+              width={200}
+              height={80}
+              className="h-12 sm:h-14 lg:h-16 w-auto object-contain rounded-lg"
             />
             <div>
               <h1 className="text-3xl font-bold text-white">Schedule a Consultation</h1>
