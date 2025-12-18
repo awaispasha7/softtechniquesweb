@@ -4,13 +4,18 @@
 
 Your frontend has been updated to work with your Railway-deployed backend. Here's what you need to do:
 
-### 1. Set Environment Variable
+### 1. Set Environment Variables
 
-Create a `.env.local` file in your project root with your Railway URL:
+**IMPORTANT:** Do NOT set `NEXT_PUBLIC_API_BASE_URL` in production. The app uses API proxy routes to avoid CORS issues.
 
+For Railway deployment, set:
+- `BACKEND_API_URL=https://web-production-608ab4.up.railway.app` (for the proxy routes)
+
+**Local Development:**
+Create a `.env.local` file:
 ```bash
-# Your actual Railway deployment URL
-NEXT_PUBLIC_API_BASE_URL=https://web-production-608ab4.up.railway.app
+# Backend URL for proxy routes (server-side only)
+BACKEND_API_URL=http://localhost:8000
 ```
 
 ### 2. Railway Deployment Settings
@@ -20,7 +25,8 @@ NEXT_PUBLIC_API_BASE_URL=https://web-production-608ab4.up.railway.app
 - Build command: `next build --turbopack`
 - Start command: `next start -p $PORT`
 - Environment variables:
-  - `NEXT_PUBLIC_API_BASE_URL=https://web-production-608ab4.up.railway.app`
+  - `BACKEND_API_URL=https://web-production-608ab4.up.railway.app` (for proxy routes)
+  - **DO NOT SET** `NEXT_PUBLIC_API_BASE_URL` (leave it unset to use `/api` proxy routes)
 
 **Backend Service (FastAPI):**
 - Environment variables:
@@ -51,18 +57,19 @@ After deployment, test:
 
 ### 6. Local Development
 
-For local development, you can override the environment variable:
+For local development, set the backend URL for proxy routes:
 
 ```bash
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+BACKEND_API_URL=http://localhost:8000
 ```
 
-This allows you to test locally while keeping the production configuration pointing to Railway.
+The frontend will use `/api` routes which proxy to your local backend.
 
 ### 7. Troubleshooting
 
 If you get CORS errors:
-1. Verify `ALLOWED_ORIGINS` on backend includes your exact frontend domain
-2. Check that `NEXT_PUBLIC_API_BASE_URL` on frontend points to your backend
+1. **Remove `NEXT_PUBLIC_API_BASE_URL` from production environment variables** - The app should use `/api` proxy routes
+2. Set `BACKEND_API_URL` to your Railway backend URL (for the proxy routes)
 3. Ensure both services are deployed and running
 4. Test backend health: `curl https://web-production-608ab4.up.railway.app/health`
+5. Test proxy route: `curl https://your-frontend-domain.com/api/chat` (should proxy to backend)
