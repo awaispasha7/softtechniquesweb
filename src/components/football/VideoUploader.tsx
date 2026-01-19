@@ -70,19 +70,22 @@ export default function VideoUploader({
             // This avoids Next.js HTTP/2 protocol errors with large files
             // Use Railway backend in production, localhost in development
             const getBackendUrl = () => {
-                if (typeof window !== 'undefined') {
-                    const hostname = window.location.hostname;
+                // Always use Railway backend in production (not localhost)
+                // Check if we're in production environment
+                const isProduction = typeof window !== 'undefined' 
+                    ? (window.location.hostname !== 'localhost' && 
+                       window.location.hostname !== '127.0.0.1' &&
+                       !window.location.hostname.startsWith('192.168.') &&
+                       !window.location.hostname.startsWith('10.'))
+                    : process.env.NODE_ENV === 'production';
+                
+                if (isProduction) {
+                    // Production - always use Railway backend
+                    return 'https://web-production-608ab4.up.railway.app';
+                } else {
                     // Local development - use localhost:8000
-                    if (hostname === 'localhost' || hostname === '127.0.0.1') {
-                        return 'http://localhost:8000';
-                    }
-                    // Production deployment on softtechniques.com - use Railway backend
-                    if (hostname === 'softtechniques.com' || hostname.includes('softtechniques')) {
-                        return 'https://web-production-608ab4.up.railway.app';
-                    }
+                    return 'http://localhost:8000';
                 }
-                // Fallback: use env var, Railway URL, or default
-                return process.env.NEXT_PUBLIC_FOOTBALL_API_URL || 'https://web-production-608ab4.up.railway.app';
             };
             
             const backendUrl = getBackendUrl();
