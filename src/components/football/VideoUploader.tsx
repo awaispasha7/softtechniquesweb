@@ -127,15 +127,28 @@ export default function VideoUploader({
                             reject(new Error(`Failed to parse server response: ${error.message}`));
                         }
                     } else {
-                        try {
-                            const error = JSON.parse(xhr.responseText);
-                            reject(new Error(error.detail || error.error || 'Upload failed'));
-                        } catch {
-                            reject(new Error(`Upload failed with status ${xhr.status}: ${xhr.statusText}`));
+                        // Handle different error status codes
+                        let errorMessage = `Upload failed with status ${xhr.status}`;
+                        if (xhr.status === 404) {
+                            errorMessage = 'Backend endpoint not found. Please check if the backend is running and has football analysis routes registered.';
+                        } else if (xhr.status === 502 || xhr.status === 503) {
+                            errorMessage = 'Backend server is unavailable. Please check if the backend is running.';
+                        } else {
+                            try {
+                                const error = JSON.parse(xhr.responseText);
+                                errorMessage = error.detail || error.error || errorMessage;
+                            } catch {
+                                // If can't parse, use default message
+                            }
                         }
+                        console.error(`[VideoUploader] Upload error ${xhr.status}:`, errorMessage, 'Response:', xhr.responseText);
+                        reject(new Error(errorMessage));
                     }
                 };
-                xhr.onerror = () => reject(new Error('Network error during upload'));
+                xhr.onerror = () => {
+                    console.error('[VideoUploader] Network error - unable to connect to backend:', uploadUrl);
+                    reject(new Error(`Network error: Unable to connect to backend at ${backendUrl}. Please check if the backend server is running.`));
+                };
                 xhr.ontimeout = () => reject(new Error('Upload timeout - the file may be too large'));
                 xhr.timeout = 300000; // 5 minute timeout for large files
                 xhr.open('POST', uploadUrl);
