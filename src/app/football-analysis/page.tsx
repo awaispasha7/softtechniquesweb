@@ -180,7 +180,17 @@ export default function FootballAnalysisPage() {
                                     />
                                 )}
                             </>
-                        ) : null}
+                        ) : (
+                            // Show uploader disabled when not signed in
+                            <div className="w-full max-w-2xl mx-auto">
+                                <VideoUploader
+                                    onUploadComplete={handleUploadComplete}
+                                    onError={handleError}
+                                    isProcessing={false}
+                                    userId={null}
+                                />
+                            </div>
+                        )}
                     </section>
 
                     {/* Enhanced "How It Works" Section */}
