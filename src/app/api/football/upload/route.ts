@@ -130,7 +130,8 @@ export async function POST(req: NextRequest) {
       clearTimeout(timeoutId);
       console.error(`[Football Upload] Fetch error:`, fetchError);
       
-      if (fetchError.name === 'AbortError') {
+      const err = fetchError instanceof Error ? fetchError : new Error('Unknown error');
+      if (err.name === 'AbortError') {
         return NextResponse.json(
           { error: "Upload timeout. The file may be too large or the server is taking too long to respond." },
           { status: 504 }
@@ -138,7 +139,7 @@ export async function POST(req: NextRequest) {
       }
       
       // Re-throw to be caught by outer catch block
-      throw fetchError;
+      throw err;
     }
   } catch (err) {
     console.error("Error in /api/football/upload:", err);
