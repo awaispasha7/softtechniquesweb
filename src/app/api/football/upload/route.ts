@@ -98,7 +98,6 @@ export async function POST(req: NextRequest) {
           'Accept': 'application/json',
           'Connection': 'keep-alive',
         },
-        // @ts-expect-error - Node.js fetch supports this
         keepalive: true,
       });
 

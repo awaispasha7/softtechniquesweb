@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, type FileRejection } from 'react-dropzone';
 
 interface VideoUploaderProps {
     onUploadComplete: (jobId: string) => void;
@@ -23,7 +23,7 @@ export default function VideoUploader({
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
 
-    const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: { file: File; errors: { code: string; message?: string }[] }[]) => {
+    const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
         if (rejectedFiles.length > 0) {
             const rejection = rejectedFiles[0];
             if (rejection.errors[0]?.code === 'file-too-large') {
