@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* Glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Fade in up animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+  opacity: 0;
+}
+
+/* Ensure navbar is always visible */
+nav {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  background: #44559e !important;
+  min-height: 64px !important;
+}
+
+/* Ensure mobile menu button is visible */
+nav button[aria-label="Toggle menu"] {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Mobile-specific navbar visibility */
+@media (max-width: 767px) {
+  nav {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  nav button[aria-label="Toggle menu"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Hide hamburger menu on desktop */
+@media (min-width: 768px) {
+  nav button[aria-label="Toggle menu"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+}

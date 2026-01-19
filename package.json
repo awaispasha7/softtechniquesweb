@@ -1,0 +1,35 @@
+{
+  "name": "soft",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "node -e \"const fs=require('fs'),path=require('path');const src=path.join('node_modules','pdfjs-dist','build','pdf.worker.min.mjs');const dest=path.join('public','pdf.worker.min.mjs');if(fs.existsSync(src)){fs.copyFileSync(src,dest);console.log('✅ PDF worker copied to public folder');}else{console.log('⚠️ PDF worker not found, will use CDN');}\""
+  },
+  "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "cloudinary": "^2.8.0",
+    "firebase": "^10.14.1",
+    "firebase-admin": "^13.0.1",
+    "mammoth": "^1.6.0",
+    "next": "15.5.9",
+    "pdfjs-dist": "^5.4.394",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-dropzone": "^14.3.8"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.9",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
