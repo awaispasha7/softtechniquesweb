@@ -117,12 +117,13 @@ export default function ProcessingStatus({
                     onError(data.error || 'Processing failed');
                 }
             } catch (error: unknown) {
-                if (error.name === 'AbortError') {
+                const err = error instanceof Error ? error : new Error('Unknown error');
+                if (err.name === 'AbortError') {
                     console.log(`[Frontend] Request aborted for job ${jobId}, will retry...`);
                     return;
                 }
                 
-                console.error(`[Frontend] Status poll error for job ${jobId}:`, error);
+                console.error(`[Frontend] Status poll error for job ${jobId}:`, err);
                 errorCountRef.current += 1;
                 
                 if (errorCountRef.current > 50) {
