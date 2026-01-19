@@ -26,7 +26,6 @@ export default function ProcessingStatus({
     const errorCountRef = React.useRef(0);
 
     useEffect(() => {
-        let intervalId: NodeJS.Timeout;
         let isMounted = true;
 
         const pollStatus = async () => {
@@ -140,7 +139,7 @@ export default function ProcessingStatus({
             pollStatus();
         }, 500);
 
-        intervalId = setInterval(pollStatus, 2000);
+        const intervalId = setInterval(pollStatus, 2000);
 
         return () => {
             isMounted = false;
