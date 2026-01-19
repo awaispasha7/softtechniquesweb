@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { hasCredits, useCredit } from "@/lib/creditServiceAdmin";
+import { hasCredits, useCredit as deductCredit } from "@/lib/creditServiceAdmin";
 import { getAdminDb } from "@/lib/firebaseAdmin";
 
 // Configure route for large file uploads
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Use a credit before processing
-    const creditUsed = await useCredit(userId);
+    const creditUsed = await deductCredit(userId);
     if (!creditUsed) {
       return NextResponse.json(
         { error: "Failed to use credit. Please try again." },
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
           'Accept': 'application/json',
           'Connection': 'keep-alive',
         },
-        // @ts-ignore - Node.js fetch supports this
+        // @ts-expect-error - Node.js fetch supports this
         keepalive: true,
       });
 
@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
           const errorData = await backendRes.json();
           errorDetail = errorData.detail || errorData.error || errorDetail;
           console.error(`[Football Upload] Backend error:`, errorData);
-        } catch (parseError) {
+        } catch {
           const errorText = await backendRes.text().catch(() => 'Unknown error');
           console.error(`[Football Upload] Backend error (non-JSON):`, errorText);
           errorDetail = errorText || errorDetail;
@@ -127,7 +127,7 @@ export async function POST(req: NextRequest) {
       const result = await backendRes.json();
       console.log(`[Football Upload] Upload successful, job_id: ${result.job_id}`);
       return NextResponse.json(result);
-    } catch (fetchError: any) {
+    } catch (fetchError: unknown) {
       clearTimeout(timeoutId);
       console.error(`[Football Upload] Fetch error:`, fetchError);
       

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { hasCredits, useCredit } from "@/lib/creditServiceAdmin";
+import { hasCredits, useCredit as deductCredit } from "@/lib/creditServiceAdmin";
 import { getAdminDb } from "@/lib/firebaseAdmin";
 
 export const runtime = 'nodejs';
@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     // Use a credit before processing
     let creditUsed;
     try {
-      creditUsed = await useCredit(userId);
+      creditUsed = await deductCredit(userId);
     } catch (creditUseError) {
       console.error('[Deduct Credit] Error using credit:', creditUseError);
       return NextResponse.json(

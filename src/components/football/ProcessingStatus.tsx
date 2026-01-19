@@ -116,7 +116,7 @@ export default function ProcessingStatus({
                     clearInterval(intervalId);
                     onError(data.error || 'Processing failed');
                 }
-            } catch (error: any) {
+            } catch (error: unknown) {
                 if (error.name === 'AbortError') {
                     console.log(`[Frontend] Request aborted for job ${jobId}, will retry...`);
                     return;
@@ -224,7 +224,7 @@ export default function ProcessingStatus({
                         { label: 'Analyze', threshold: 10 },
                         { label: 'Detect', threshold: 50 },
                         { label: 'Encode', threshold: 90 },
-                    ].map((stage, index) => (
+                    ].map((stage) => (
                         <div key={stage.label} className="text-center">
                             <div
                                 className={`

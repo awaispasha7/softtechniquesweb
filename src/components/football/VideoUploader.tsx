@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { API_ENDPOINTS } from '@/config/api';
 
 interface VideoUploaderProps {
     onUploadComplete: (jobId: string) => void;
@@ -24,7 +23,7 @@ export default function VideoUploader({
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
 
-    const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
+    const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: { file: File; errors: { code: string; message?: string }[] }[]) => {
         if (rejectedFiles.length > 0) {
             const rejection = rejectedFiles[0];
             if (rejection.errors[0]?.code === 'file-too-large') {
@@ -103,7 +102,11 @@ export default function VideoUploader({
                 }
             });
 
-            const response = await new Promise<any>((resolve, reject) => {
+            interface UploadResponse {
+                job_id: string;
+            }
+            
+            const response = await new Promise<UploadResponse>((resolve, reject) => {
                 xhr.onload = () => {
                     if (xhr.status >= 200 && xhr.status < 300) {
                         try {
@@ -118,9 +121,10 @@ export default function VideoUploader({
                                 return;
                             }
                             resolve(parsed);
-                        } catch (parseError: any) {
-                            console.error('Error parsing upload response:', parseError, 'Response:', xhr.responseText);
-                            reject(new Error(`Failed to parse server response: ${parseError.message}`));
+                        } catch (parseError: unknown) {
+                            const error = parseError instanceof Error ? parseError : new Error('Unknown error');
+                            console.error('Error parsing upload response:', error, 'Response:', xhr.responseText);
+                            reject(new Error(`Failed to parse server response: ${error.message}`));
                         }
                     } else {
                         try {
@@ -139,9 +143,10 @@ export default function VideoUploader({
             });
 
             onUploadComplete(response.job_id);
-        } catch (error: any) {
+        } catch (error: unknown) {
+            const err = error instanceof Error ? error : new Error('Unknown error');
             // Handle authentication errors
-            const errorMessage = error.message || 'Upload failed';
+            const errorMessage = err.message || 'Upload failed';
             if (errorMessage.includes('401') || errorMessage.includes('Authentication')) {
                 onError('Please sign in to upload videos');
             } else {

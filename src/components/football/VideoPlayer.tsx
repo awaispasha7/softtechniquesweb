@@ -12,7 +12,7 @@ export default function VideoPlayer({ resultUrl, onReset }: VideoPlayerProps) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [, setIsFullscreen] = useState(false);
 
     const handlePlayPause = () => {
         if (videoRef.current) {

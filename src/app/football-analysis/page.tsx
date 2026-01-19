@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -14,7 +13,6 @@ import { useAuth } from "@/components/AuthProvider";
 type AppState = 'upload' | 'processing' | 'result' | 'error';
 
 export default function FootballAnalysisPage() {
-    const router = useRouter();
     const { user, userData, loading: authLoading } = useAuth();
     const [appState, setAppState] = useState<AppState>('upload');
     const [jobId, setJobId] = useState<string | null>(null);
